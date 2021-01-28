@@ -51,12 +51,6 @@ add_library (glad ${GLAD_DIR}/src/glad.c)
 # 设置MSVC编译编码
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>")
 
-# 查找当前目录下的所有源文件并存入DIR_SRCS变量
-# aux_source_directory(src SRC_DIR)
-
-# 递归列出所有源文件
-# file (GLOB_RECURSE SOURCE_FILES *.cc)
-
 aux_source_directory(${PROJECT_SOURCE_DIR}/src DIR_SRCS)
 # 添加一个可编译的目标到工程
 add_executable (${PROJECT_NAME} ${DIR_SRCS})
