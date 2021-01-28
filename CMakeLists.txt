@@ -51,10 +51,12 @@ add_library (glad ${GLAD_DIR}/src/glad.c)
 # 设置MSVC编译编码
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>")
 
-aux_source_directory(${PROJECT_SOURCE_DIR}/src DIR_SRCS)
 # 添加一个可编译的目标到工程
-add_executable (${PROJECT_NAME} ${DIR_SRCS})
-
+# aux_source_directory(${PROJECT_SOURCE_DIR}/src DIR_SRCS)
+set (SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+include_directories (${SRC_DIR})
+file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
+add_executable (${PROJECT_NAME} ${SRC_FILES})
 # 设置工作目录
 # set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY 
 #     ${CMAKE_SOURCE_DIR}/resources

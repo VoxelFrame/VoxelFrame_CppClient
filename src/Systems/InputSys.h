@@ -1,0 +1,3 @@
+namespace InputSys{
+    void init();
+}

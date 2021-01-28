@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/src/**",
                 "${workspaceFolder}/third/glad/include",
-                "${workspaceFolder}/third/glfw/include"
+                "${workspaceFolder}/third/glfw/include",
             ],
             "defines": [
                 "_DEBUG",
