@@ -1,0 +1,3 @@
+[submodule "src/third_party/glfw"]
+	path = src/third_party/glfw
+	url = https://github.com/VoxelFrame/glfw.git
