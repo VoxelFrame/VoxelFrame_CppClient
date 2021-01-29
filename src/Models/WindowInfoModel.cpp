@@ -11,4 +11,6 @@ WindowInfoModel &WindowInfoModel::getInstance()
 
 WindowInfoModel::WindowInfoModel()
 {
+    Width = 800;
+    Height = 600;
 }

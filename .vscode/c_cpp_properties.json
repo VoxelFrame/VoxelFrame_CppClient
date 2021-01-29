@@ -6,6 +6,7 @@
                 "${workspaceFolder}/src/**",
                 "${workspaceFolder}/third/glad/include",
                 "${workspaceFolder}/third/glfw/include",
+                "${workspaceFolder}/third/glm/include",
             ],
             "defines": [
                 "_DEBUG",

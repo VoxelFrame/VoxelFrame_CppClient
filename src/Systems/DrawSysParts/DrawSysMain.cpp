@@ -1,19 +1,26 @@
-#include "DrawSys.h"
+#include "../DrawSys.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include <iostream>
 #include "Models/WindowInfoModel.h"
+#include "Systems/CalcSys.h"
+#include "interface.h"
 namespace DrawSys
 {
     void drawBegin();
+    void drawEnd();
     void doDraw()
     {
         drawBegin();
+        drawEnd();
     }
     //窗口大小变化时，重新设置视口
     void framebuff_size_callback(GLFWwindow *window, int width, int height)
     {
         glViewport(0, 0, width, height);
+        WindowInfoModel &wim = WindowInfoModel::getInstance();
+        wim.Height = height;
+        wim.Width = width;
     }
     bool init()
     {
@@ -23,10 +30,13 @@ namespace DrawSys
         //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
 
         //创建窗口
-        GLFWwindow *window = glfwCreateWindow(800, 600, "OpenGLTest", NULL, NULL);
-        WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
+        GLFWwindow *window = glfwCreateWindow(
+            windowInfoModel.Width,
+            windowInfoModel.Height, "OpenGLTest", NULL, NULL);
+
         windowInfoModel.window = window;
         if (window == NULL)
         {
@@ -51,12 +61,12 @@ namespace DrawSys
 
         //监听窗口大小变化
         glfwSetFramebufferSizeCallback(window, framebuff_size_callback);
+        interface::initInterface();
         return true;
     }
 
-    void drawBegin()
+    inline void drawBegin()
     {
-        WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
 
         // fpsStart = clock();
         double nowTime = glfwGetTime();
@@ -65,6 +75,13 @@ namespace DrawSys
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    inline void drawEnd()
+    {
+        WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
+        CalcSys::calcWindowInfo();
+        DrawSys::drawWindowInfo();
         //将存储在缓冲区中的像素颜色进行绘制，这里涉及到双缓冲的问题
         glfwSwapBuffers(windowInfoModel.window);
         //检查有没有触发什么事件（键盘输入、鼠标移动等)、窗口改变

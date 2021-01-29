@@ -27,7 +27,9 @@ set (GLFW_DIR ${3RD_DIR}/glfw)
 add_subdirectory (${GLFW_DIR})
 # 添加头文件搜索路径
 include_directories (${GLFW_DIR}/include)
-
+# GLM
+set (GLM_DIR ${3RD_DIR}/glm)
+include_directories (${GLM_DIR}/include)
 # glad
 set (GLAD_DIR ${3RD_DIR}/glad)
 include_directories (${GLAD_DIR}/include)
