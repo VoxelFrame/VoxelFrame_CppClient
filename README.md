@@ -11,3 +11,13 @@ git submodule update --init
 ```
 
 来加载子模块
+
+2.resource文件夹要和exe在同一目录下
+
+## 使用了的库
+
+glfw
+
+glad
+
+imgui

@@ -2,6 +2,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include <iostream>
+#include <string>
 #include "Models/WindowInfoModel.h"
 using namespace std;
 namespace DrawSys
