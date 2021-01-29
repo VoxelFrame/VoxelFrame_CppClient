@@ -14,6 +14,10 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 #     "${PROJECT_SOURCE_DIR}/${PROJECT_NAME}Config.h"
 # )
 
+#预先宏
+# add_definitions("-DCPP_SRC_DIR=\"${PROJECT_SOURCE_DIR}/\"")
+
+
 set (3RD_DIR ${PROJECT_SOURCE_DIR}/third)
 set(CMAKE_MODULE_PATH ${3RD_DIR})
 
@@ -27,14 +31,21 @@ set (GLFW_DIR ${3RD_DIR}/glfw)
 add_subdirectory (${GLFW_DIR})
 # 添加头文件搜索路径
 include_directories (${GLFW_DIR}/include)
+
 # GLM
 set (GLM_DIR ${3RD_DIR}/glm)
 include_directories (${GLM_DIR}/include)
+
 # glad
 set (GLAD_DIR ${3RD_DIR}/glad)
 include_directories (${GLAD_DIR}/include)
 # 生成链接库
 add_library (glad ${GLAD_DIR}/src/glad.c)
+
+#imgui
+set (IMGUI_DIR ${3RD_DIR}/vf_imgui)
+add_subdirectory(${IMGUI_DIR})
+include_directories (${IMGUI_DIR}/imgui)
 
 # # glm
 # set (GLM_DIR ${3RD_DIR}/glm)
@@ -65,7 +76,7 @@ add_executable (${PROJECT_NAME} ${SRC_FILES})
 # )
 
 # 添加链接库
-target_link_libraries (${PROJECT_NAME} glfw glad)
+target_link_libraries (${PROJECT_NAME} glfw glad imgui)
 
 # target_compile_definitions(${PROJECT_NAME} PRIVATE GLFW_INCLUDE_NONE)
 

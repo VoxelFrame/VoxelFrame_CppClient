@@ -3,8 +3,7 @@
 #include "GLFW/glfw3.h"
 #include <iostream>
 #include "Models/WindowInfoModel.h"
-#include "interface.h"
-
+using namespace std;
 namespace DrawSys
 {
     void drawWindowInfo()
@@ -13,6 +12,6 @@ namespace DrawSys
         //drawFPS
         string fpsText = "FPS:";
         fpsText.append(to_string(wim.fps));
-        interface::drawText(fpsText, 0.9 * wim.Width, 0.925 * wim.Height, 1.0f, glm::vec3(1.00f, 1.00f, 1.00f));
+        // interface::drawText(fpsText, 0.9 * wim.Width, 0.925 * wim.Height, 1.0f, glm::vec3(1.00f, 1.00f, 1.00f));
     }
 } // namespace DrawSys

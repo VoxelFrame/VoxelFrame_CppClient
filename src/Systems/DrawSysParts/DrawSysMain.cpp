@@ -4,7 +4,8 @@
 #include <iostream>
 #include "Models/WindowInfoModel.h"
 #include "Systems/CalcSys.h"
-#include "interface.h"
+#include "GuiSys/GuiSys.h"
+
 namespace DrawSys
 {
     void drawBegin();
@@ -61,7 +62,8 @@ namespace DrawSys
 
         //监听窗口大小变化
         glfwSetFramebufferSizeCallback(window, framebuff_size_callback);
-        interface::initInterface();
+
+        GuiSys::init();
         return true;
     }
 

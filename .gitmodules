@@ -2,3 +2,6 @@
 [submodule "third/glfw"]
 	path = third/glfw
 	url = https://github.com/VoxelFrame/glfw.git
+[submodule "third/vf_imgui"]
+	path = third/vf_imgui
+	url = https://github.com/VoxelFrame/vf_imgui.git
