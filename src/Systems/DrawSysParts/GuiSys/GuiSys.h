@@ -10,7 +10,9 @@ namespace DrawSys
     namespace GuiSys
     {
         void init();
-    }
+        void drawGui();
+        void renderGui();
+    } // namespace GuiSys
 } // namespace DrawSys
 
 #endif // __GUISYS_H__

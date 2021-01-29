@@ -4,6 +4,11 @@ namespace DrawSys
 {
     namespace GuiSys
     {
+        ImFont *font_default; // = io.Fonts->AddFontDefault();
+        ImFont *font_cousine; // = io.Fonts -> AddFontFromFileTTF("resource/font/Cousine-Regular.ttf", 15.0f);
+        ImFont *font_karla;   // = io.Fonts -> AddFontFromFileTTF("resource/font/Karla-Regular.ttf", 18.0f);
+        ImFont *font_latol;   // = io void init()
+        ImVec4 clear_color;   // = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
         void init()
         {
             WindowInfoModel &wim = WindowInfoModel::getInstance();
@@ -34,15 +39,86 @@ namespace DrawSys
             //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
             //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
 
-            auto font_default = io.Fonts->AddFontDefault();
-            auto font_cousine = io.Fonts->AddFontFromFileTTF("resource/font/Cousine-Regular.ttf", 15.0f);
-            auto font_karla = io.Fonts->AddFontFromFileTTF("resource/font/Karla-Regular.ttf", 18.0f);
-            auto font_lato = io.Fonts->AddFontFromFileTTF("resource/font/Lato-Regular.ttf", 18.0f);
+            font_default = io.Fonts->AddFontDefault();
+            font_cousine = io.Fonts->AddFontFromFileTTF("resource/font/Cousine-Regular.ttf", 15.0f);
+            font_karla = io.Fonts->AddFontFromFileTTF("resource/font/Karla-Regular.ttf", 18.0f);
+            font_latol = io.Fonts->AddFontFromFileTTF("resource/font/Lato-Regular.ttf", 18.0f);
 
-            io.Fonts->AddFontFromFileTTF("resource/font/DroidSans.ttf", 16.0f);
-            io.Fonts->AddFontFromFileTTF("resource/font/ProggyTiny.ttf", 10.0f);
+            // io.Fonts->AddFontFromFileTTF("resource/font/DroidSans.ttf", 16.0f);
+            // io.Fonts->AddFontFromFileTTF("resource/font/ProggyTiny.ttf", 10.0f);
             // ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
             // IM_ASSERT(font != NULL);
+            clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+        }
+        void renderGui()
+        {
+            // Start the ImGui frame
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            static int font_current = 0;
+            static int old_font_current = 0;
+            switch (font_current)
+            {
+            case 0:
+                ImGui::PushFont(font_default);
+                break;
+            case 1:
+                ImGui::PushFont(font_cousine);
+                break;
+            case 2:
+                ImGui::PushFont(font_karla);
+                break;
+            case 3:
+                ImGui::PushFont(font_latol);
+                break;
+            }
+
+            // 1. Show a simple window.
+            // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called "Debug".
+            {
+                static float f = 0.0f;
+                static int counter = 0;
+                ImGui::Text("Hello, world!");                            // Display some text (you can use a format string too)
+                ImGui::SliderFloat("float", &f, 0.0f, 1.0f);             // Edit 1 float using a slider from 0.0f to 1.0f
+                ImGui::ColorEdit3("clear color", (float *)&clear_color); // Edit 3 floats representing a color
+
+                ImGui::Text("Windows");
+                // ImGui::Checkbox("Demo Window", &show_demo_window);    // Edit bools storing our windows open/close state
+                // ImGui::Checkbox("Themes Window", &show_theme_window); // Edit bools storing our windows open/close state
+                // ImGui::Checkbox("Another Window", &show_another_window);
+
+                ImGui::Text("Font Samples");
+                ImGui::PushFont(font_cousine);
+                ImGui::Text("Font Render Test - Cousine: Bit Test.123");
+                ImGui::Text("Font Render Test - Cousine: XXXXXXXXXXXX");
+                ImGui::PopFont();
+
+                ImGui::PushFont(font_karla);
+                ImGui::Text("Font Render Test - Karla: Bit Test.123");
+                ImGui::Text("Font Render Test - Karla: XXXXXXXXXXXX");
+                ImGui::PopFont();
+
+                ImGui::PushFont(font_latol);
+                ImGui::Text("Font Render Test - Lato: Bit Test.123");
+                ImGui::Text("Font Render Test - Lato: XXXXXXXXXXXX");
+                ImGui::PopFont();
+
+                if (ImGui::Button("Button")) // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                    counter++;
+                ImGui::SameLine();
+                ImGui::Text("counter = %d", counter);
+
+                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            }
+            ImGui::PopFont();
+            // Rendering
+            ImGui::Render();
+        }
+        void drawGui()
+        {
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         }
     } // namespace GuiSys
 } // namespace DrawSys
