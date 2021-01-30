@@ -7,6 +7,7 @@
                 "${workspaceFolder}/third/glad/include",
                 "${workspaceFolder}/third/glfw/include",
                 "${workspaceFolder}/third/glm/include",
+                "${workspaceFolder}/third/brynet/include",
             ],
             "defines": [
                 "_DEBUG",

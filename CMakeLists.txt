@@ -47,6 +47,11 @@ set (IMGUI_DIR ${3RD_DIR}/vf_imgui)
 add_subdirectory(${IMGUI_DIR})
 include_directories (${IMGUI_DIR}/imgui)
 
+#brynet
+set (BRYNET_DIR ${3RD_DIR}/brynet)
+# add_subdirectory(${IMGUI_DIR})
+include_directories (${BRYNET_DIR}/include)
+
 # # glm
 # set (GLM_DIR ${3RD_DIR}/glm)
 # include_directories (${GLM_DIR}/glm)

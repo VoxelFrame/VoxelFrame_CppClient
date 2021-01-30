@@ -1,10 +1,10 @@
-#include "../DrawSys.h"
+#include "DrawSys.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include <iostream>
 #include "Models/WindowInfoModel.h"
-#include "Systems/CalcSys.h"
-#include "GuiSys/GuiSys.h"
+#include "Systems/CalcSys/CalcSys.h"
+#include "Systems/DrawSys/GuiSys/GuiSys.h"
 
 namespace DrawSys
 {

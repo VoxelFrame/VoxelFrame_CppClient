@@ -1,4 +1,4 @@
-#include "../CalcSys.h"
+#include "CalcSys.h"
 #include "Models/WindowInfoModel.h"
 #include "GLFW/glfw3.h"
 

@@ -2,7 +2,7 @@
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "Systems/DrawSys.h"
+#include "Systems/DrawSys/DrawSys.h"
 #include "Models/WindowInfoModel.h"
 #pragma comment(lib, "glfw3.lib")
 
