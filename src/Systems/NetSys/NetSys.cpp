@@ -18,7 +18,7 @@ namespace NetSys
     void netSysThread();
     void start()
     {
-        auto th = std::make_shared<thread>(netSysThread); // new thread(netSysThread);
+        auto th = new thread(netSysThread); // new thread(netSysThread);
     }
     void netSysThread()
     {

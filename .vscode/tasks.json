@@ -4,12 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "beforeDebug",
+            "label": "echo",
             "type": "shell",
-            "command": "${command:multiCommand.beforeDebug}",
-            "args": [],
-            "presentation": {},
-            "problemMatcher": []
+            "command": "echo Hello"
         }
     ]
 }

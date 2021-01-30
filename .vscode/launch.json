@@ -8,7 +8,8 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/VoxelFrame.exe",
+            "program": "${workspaceFolder}/build/VoxelFrame.exe", //mingw
+            // "program": "${workspaceFolder}/build/Debug/VoxelFrame.exe",//msvc
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -23,7 +24,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "beforeDebug"
+            // "preLaunchTask": "beforeDebug"
         }
     ]
 }

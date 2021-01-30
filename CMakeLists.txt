@@ -6,7 +6,7 @@ set(PROJECT_NAME VoxelFrame)
 project (${PROJECT_NAME})
 
 set (CMAKE_CXX_STAND 11)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g")
 
 # 配置一个头文件来传递一个cmake设置到源代码
 # configure_file (
