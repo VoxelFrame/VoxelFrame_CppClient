@@ -49,7 +49,7 @@ include_directories (${IMGUI_DIR}/imgui)
 
 #brynet
 set (BRYNET_DIR ${3RD_DIR}/brynet)
-# add_subdirectory(${IMGUI_DIR})
+add_subdirectory(${BRYNET_DIR}) 
 include_directories (${BRYNET_DIR}/include)
 
 # # glm
@@ -81,7 +81,8 @@ add_executable (${PROJECT_NAME} ${SRC_FILES})
 # )
 
 # 添加链接库
-target_link_libraries (${PROJECT_NAME} glfw glad imgui)
+target_link_libraries (${PROJECT_NAME} glfw glad imgui ws2_32)
+
 
 # target_compile_definitions(${PROJECT_NAME} PRIVATE GLFW_INCLUDE_NONE)
 

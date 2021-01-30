@@ -1,6 +1,8 @@
 这是我当前主要在开发的VoxelFrame的客户端部分，使用的cpp和opengl
 
+## 当前测验可以直接编译的开发环境
 
+windows下的mingw和msvc均可编译
 
 ## 必要的操作
 

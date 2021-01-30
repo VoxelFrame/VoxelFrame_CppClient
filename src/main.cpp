@@ -3,8 +3,9 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "Systems/DrawSys/DrawSys.h"
+#include "Systems/NetSys/NetSys.h"
 #include "Models/WindowInfoModel.h"
-#pragma comment(lib, "glfw3.lib")
+// #pragma comment(lib, "glfw3.lib")
 
 int main()
 {
@@ -12,6 +13,7 @@ int main()
     {
         return -1; //启动失败
     }
+    NetSys::start();
     WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
 
     //循环渲染，在退出前一直不断地绘制图像
