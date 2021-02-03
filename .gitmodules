@@ -8,3 +8,6 @@
 [submodule "third/brynet"]
 	path = third/brynet
 	url = https://github.com/VoxelFrame/brynet.git
+[submodule "third/protobuff"]
+	path = third/protobuff
+	url = https://github.com/VoxelFrame/protobuff.git
