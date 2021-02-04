@@ -9,6 +9,7 @@ namespace DrawSys
         ImFont *font_karla;   // = io.Fonts -> AddFontFromFileTTF("resource/font/Karla-Regular.ttf", 18.0f);
         ImFont *font_latol;   // = io void init()
         ImVec4 clear_color;   // = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+        bool isRender=false;
         void init()
         {
             WindowInfoModel &wim = WindowInfoModel::getInstance();
@@ -79,7 +80,7 @@ namespace DrawSys
             // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called "Debug".
             {
                 static float f = 0.0f;
-                static int counter = 0;
+                static int counter = 0;  
                 ImGui::Text("Hello, world!");                            // Display some text (you can use a format string too)
                 ImGui::SliderFloat("float", &f, 0.0f, 1.0f);             // Edit 1 float using a slider from 0.0f to 1.0f
                 ImGui::ColorEdit3("clear color", (float *)&clear_color); // Edit 3 floats representing a color
@@ -107,6 +108,8 @@ namespace DrawSys
 
                 if (ImGui::Button("Button")) // Buttons return true when clicked (NB: most widgets return true when edited/activated)
                     counter++;
+                if(ImGui::Button("Render"))
+                    isRender=!isRender;
                 ImGui::SameLine();
                 ImGui::Text("counter = %d", counter);
 

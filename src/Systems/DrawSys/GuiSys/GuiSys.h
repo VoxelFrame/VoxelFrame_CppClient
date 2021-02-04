@@ -12,6 +12,7 @@ namespace DrawSys
         void init();
         void drawGui();
         void renderGui();
+        extern bool isRender;
     } // namespace GuiSys
 } // namespace DrawSys
 
