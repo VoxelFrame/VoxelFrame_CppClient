@@ -7,7 +7,7 @@ project (${PROJECT_NAME})
 
 set (CMAKE_CXX_STAND 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g")
-
+set (CMAKE_SHARED_LINKER_FLAGS_RELEASE "/INCREMENTAL:YES")
 # 配置一个头文件来传递一个cmake设置到源代码
 # configure_file (
 #     "${PROJECT_SOURCE_DIR}/${PROJECT_NAME}Config.h.in"

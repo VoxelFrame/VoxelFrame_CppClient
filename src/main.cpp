@@ -6,6 +6,7 @@
 #include "Systems/NetSys/NetSys.h"
 #include "Models/WindowInfoModel.h"
 // #pragma comment(lib, "glfw3.lib")
+#pragma comment(lib, "ws2_32.lib")
 
 int main()
 {

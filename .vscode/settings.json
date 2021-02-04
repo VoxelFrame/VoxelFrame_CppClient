@@ -80,15 +80,16 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "*.inc": "cpp"
     },
     "multiCommand.commands": [
         {
-            "command": "multiCommand.beforeDebug",
+            "command": "multiCommand.confBuild",
             "sequence": [
                 "cmake.configure",
                 "cmake.build",
-                "cursorDown",
+                // "cursorDown",
             ]
         },
     ]
