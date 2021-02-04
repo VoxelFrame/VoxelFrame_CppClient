@@ -67,21 +67,15 @@ FOREACH(FIL ${protobuf_files})
 
     GET_FILENAME_COMPONENT(FIL_WE ${FIL} NAME_WE)
 
-    string(REGEX REPLACE ".+/(.+)\\..*" "\\1" FILE_NAME ${FIL})
-    string(REGEX REPLACE "(.+)\\${FILE_NAME}.*" "\\1" FILE_PATH ${FIL})
-
-    string(REGEX MATCH "(/impl/Protos)" OUT_PATH ${FILE_PATH})
-
     set(PROTO_SRCS "${PROTO_FILES_DIR}/src/${FIL_WE}.pb.cc")
     set(PROTO_HDRS "${PROTO_FILES_DIR}/src/${FIL_WE}.pb.h")
 
     EXECUTE_PROCESS(
-            COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} -I${PROTO_FILES_DIR} --cpp_out=${${PROTO_FILES_DIR}/src} ${FIL}
+        COMMAND rm -f ${PROTO_FILES_DIR}/src/* 
     )
-    message("Copying " ${PROTO_FILES_DIR} )
-
-    # file(COPY ${PROTO_SRCS} DESTINATION ${FILE_PATH})
-    # file(COPY ${PROTO_HDRS} DESTINATION ${FILE_PATH})
+    EXECUTE_PROCESS(
+        COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} -I${PROTO_FILES_DIR} --cpp_out=${PROTO_FILES_DIR}/src ${FIL}
+    )
 
 ENDFOREACH()
 # protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS foo.proto)
