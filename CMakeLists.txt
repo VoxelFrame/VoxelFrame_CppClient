@@ -7,7 +7,32 @@ project (${PROJECT_NAME})
 
 set (CMAKE_CXX_STAND 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g")
-set (CMAKE_SHARED_LINKER_FLAGS_RELEASE "/INCREMENTAL:YES")
+#--------------------------------------------------------------------
+# Set compiler specific flags
+#--------------------------------------------------------------------
+# if (MSVC)
+#     if (NOT USE_MSVC_RUNTIME_LIBRARY_DLL)
+        foreach (flag CMAKE_C_FLAGS
+                      CMAKE_C_FLAGS_DEBUG
+                      CMAKE_C_FLAGS_RELEASE
+                      CMAKE_C_FLAGS_MINSIZEREL
+                      CMAKE_C_FLAGS_RELWITHDEBINFO)
+
+            if (${flag} MATCHES "/MD")
+                string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
+            endif()
+            if (${flag} MATCHES "/MDd")
+                string(REGEX REPLACE "/MDd" "/MTd" ${flag} "${${flag}}")
+            endif()
+
+        endforeach()
+#     endif()
+# endif()
+# set ( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" )
+# set ( CMAKE_C_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" )
+# set ( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELEASE} /MTd" )
+# set ( CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELEASE} /MTd" )
+# set (CMAKE_SHARED_LINKER_FLAGS_RELEASE "/INCREMENTAL:YES")
 # 配置一个头文件来传递一个cmake设置到源代码
 # configure_file (
 #     "${PROJECT_SOURCE_DIR}/${PROJECT_NAME}Config.h.in"
@@ -55,6 +80,12 @@ include_directories (${BRYNET_DIR}/include)
 # protobuf
 set (PROTO_DIR ${3RD_DIR}/protobuff)
 add_subdirectory(${PROTO_DIR}/cmake)
+include_directories (${PROTO_DIR}/src)
+
+# file(GLOB protobuf_libs
+#         ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/*.lib
+#         )
+
 set (PROTOBUF_PROTOC_EXECUTABLE ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/protoc.exe)
 set (PROTO_FILES_DIR ${PROJECT_SOURCE_DIR}/src/impl/Protos)
 file(GLOB protobuf_files
@@ -102,13 +133,46 @@ set (SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 include_directories (${SRC_DIR})
 file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp ${SRC_DIR}/*.cc)
 add_executable (${PROJECT_NAME} ${SRC_FILES})
+
+# foreach (flag CMAKE_C_FLAGS
+#                       CMAKE_C_FLAGS_DEBUG
+#                       CMAKE_C_FLAGS_RELEASE
+#                       CMAKE_C_FLAGS_MINSIZEREL
+#                       CMAKE_C_FLAGS_RELWITHDEBINFO
+#                       COMPILE_FLAGS)
+#             message(${flag})
+#             if (${flag} MATCHES "/MD")
+#                 string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
+#             endif()
+#             if (${flag} MATCHES "/MDd")
+#                 string(REGEX REPLACE "/MDd" "/MTd" ${flag} "${${flag}}")
+#             endif()
+
+#         endforeach()
+if(MSVC)
+    message(${CMAKE_BUILD_TYPE})
+    set (protolib_dir ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/)
+    IF (CMAKE_BUILD_TYPE MATCHES "Debug")
+        set_target_properties( ${PROJECT_NAME} PROPERTIES
+            COMPILE_FLAGS "/MTd"
+        )
+        
+        set (protolib ${protolib_dir}/libprotobufd.lib ${protolib_dir}/libprotobuf-lited.lib ${protolib_dir}/libprotocd.lib)
+    ELSE()
+        set_target_properties( ${PROJECT_NAME} PROPERTIES
+            COMPILE_FLAGS "/MT"
+        )
+        set (protolib ${protolib_dir}/libprotobuf.lib ${protolib_dir}/libprotobuf-lite.lib ${protolib_dir}/libprotoc.lib)
+    ENDIF()
+    
+endif()
 # 设置工作目录
 # set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY 
 #     ${CMAKE_SOURCE_DIR}/resources
 # )
 
 # 添加链接库
-target_link_libraries (${PROJECT_NAME} glfw glad imgui ws2_32)
+target_link_libraries (${PROJECT_NAME} glfw glad imgui ws2_32 ${protolib})
 
 
 # target_compile_definitions(${PROJECT_NAME} PRIVATE GLFW_INCLUDE_NONE)

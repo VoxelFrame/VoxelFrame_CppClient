@@ -8,6 +8,7 @@
                 "${workspaceFolder}/third/glfw/include",
                 "${workspaceFolder}/third/glm/include",
                 "${workspaceFolder}/third/brynet/include",
+                "${workspaceFolder}/third/protobuff/src",
             ],
             "defines": [
                 "_DEBUG",

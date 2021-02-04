@@ -7,6 +7,7 @@
 #include "Models/WindowInfoModel.h"
 // #pragma comment(lib, "glfw3.lib")
 #pragma comment(lib, "ws2_32.lib")
+// #pragma comment(lib,"lib文件名或路径")
 
 int main()
 {
