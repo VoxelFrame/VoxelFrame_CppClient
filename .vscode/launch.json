@@ -8,8 +8,8 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/VoxelFrame.exe", //mingw
-            // "program": "${workspaceFolder}/build/Debug/VoxelFrame.exe",//msvc
+            "program": "${workspaceFolder}/build/VoxelFrame.exe",
+            // "program": "${workspaceFolder}/build/Debug/VoxelFrame.exe",//windows
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
