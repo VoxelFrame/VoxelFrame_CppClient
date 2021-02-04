@@ -52,9 +52,10 @@ set (BRYNET_DIR ${3RD_DIR}/brynet)
 add_subdirectory(${BRYNET_DIR}) 
 include_directories (${BRYNET_DIR}/include)
 
-#protobuf
+# protobuf
 set (PROTO_DIR ${3RD_DIR}/protobuff)
 add_subdirectory(${PROTO_DIR}/cmake)
+
 # protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS foo.proto)
 # # glm
 # set (GLM_DIR ${3RD_DIR}/glm)
