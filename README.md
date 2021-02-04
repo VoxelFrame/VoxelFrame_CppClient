@@ -6,6 +6,8 @@ windows下的mingw和msvc均可编译
 
 网络库接口支持的是 _WIN32_WINNT>=0x0600，vista及后来的win版本，像我的qt的gcc里面描述的就是0x0520，会导致编译不过，需要手动修改
 
+![image-20210204153852935](C:\Users\hp\AppData\Roaming\Typora\typora-user-images\image-20210204153852935.png)
+
 ## 必要的操作
 
 1，有像glfw等一些依赖的子模块，需要执行
