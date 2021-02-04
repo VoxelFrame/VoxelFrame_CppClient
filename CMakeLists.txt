@@ -55,7 +55,35 @@ include_directories (${BRYNET_DIR}/include)
 # protobuf
 set (PROTO_DIR ${3RD_DIR}/protobuff)
 add_subdirectory(${PROTO_DIR}/cmake)
+set (PROTOBUF_PROTOC_EXECUTABLE ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/protoc.exe)
+set (PROTO_FILES_DIR ${PROJECT_SOURCE_DIR}/src/impl/Protos)
+file(GLOB protobuf_files
+        ${PROTO_FILES_DIR}/*.proto
+        )
+# SET(${PROTO_FILES_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+LIST(APPEND PROTO_FLAGS -I${PROTO_FILES_DIR})
 
+FOREACH(FIL ${protobuf_files})
+
+    GET_FILENAME_COMPONENT(FIL_WE ${FIL} NAME_WE)
+
+    string(REGEX REPLACE ".+/(.+)\\..*" "\\1" FILE_NAME ${FIL})
+    string(REGEX REPLACE "(.+)\\${FILE_NAME}.*" "\\1" FILE_PATH ${FIL})
+
+    string(REGEX MATCH "(/impl/Protos)" OUT_PATH ${FILE_PATH})
+
+    set(PROTO_SRCS "${PROTO_FILES_DIR}/src/${FIL_WE}.pb.cc")
+    set(PROTO_HDRS "${PROTO_FILES_DIR}/src/${FIL_WE}.pb.h")
+
+    EXECUTE_PROCESS(
+            COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} -I${PROTO_FILES_DIR} --cpp_out=${${PROTO_FILES_DIR}/src} ${FIL}
+    )
+    message("Copying " ${PROTO_FILES_DIR} )
+
+    # file(COPY ${PROTO_SRCS} DESTINATION ${FILE_PATH})
+    # file(COPY ${PROTO_HDRS} DESTINATION ${FILE_PATH})
+
+ENDFOREACH()
 # protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS foo.proto)
 # # glm
 # set (GLM_DIR ${3RD_DIR}/glm)
@@ -78,7 +106,7 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>")
 # aux_source_directory(${PROJECT_SOURCE_DIR}/src DIR_SRCS)
 set (SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 include_directories (${SRC_DIR})
-file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
+file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp ${SRC_DIR}/*.cc)
 add_executable (${PROJECT_NAME} ${SRC_FILES})
 # 设置工作目录
 # set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY 
