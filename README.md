@@ -18,6 +18,10 @@ git submodule update --init
 
 2.resource文件夹要和exe在同一目录下
 
+3.windows环境需要有mingw编译器
+
+
+
 ## 使用了的库
 
 glfw

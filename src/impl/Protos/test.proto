@@ -1,0 +1,5 @@
+package VF;
+
+message testMsg{
+   required int32 testInt =2;
+}
