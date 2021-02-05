@@ -3,12 +3,13 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/src",
                 "${workspaceFolder}/third/glad/include",
                 "${workspaceFolder}/third/glfw/include",
                 "${workspaceFolder}/third/glm/include",
                 "${workspaceFolder}/third/brynet/include",
                 "${workspaceFolder}/third/protobuff/src",
+                "${workspaceFolder}/third/vf_imgui/imgui",
             ],
             "defines": [
                 "_DEBUG",
@@ -20,7 +21,7 @@
             "cStandard": "c11",
             "cppStandard": "c++11",
             "intelliSenseMode": "msvc-x64",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            // "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4
