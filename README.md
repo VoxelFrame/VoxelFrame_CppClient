@@ -2,13 +2,13 @@
 
 ## 当前测验可以直接编译的开发环境
 
-还是推荐使用MSVC
+windows下还是推荐使用MSVC
 
 ![image-20210205154227006](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205154227.png)
 
 ~~windows下的mingw和msvc均可编译~~
 
-网络库接口支持的是 _WIN32_WINNT>=0x0600，vista及后来的win版本，像我的qt的gcc里面描述的就是0x0520，会导致编译不过，需要手动修改
+网络库接口支持的是 _WIN32_WINNT>=0x0600，vista及后来的win版本，像我的qt的gcc里面描述的就是0x0520，会导致编译不过，需要手动修改编译工具包的环境
 
 ![image-20210204153852935](C:\Users\hp\AppData\Roaming\Typora\typora-user-images\image-20210204153852935.png)
 
