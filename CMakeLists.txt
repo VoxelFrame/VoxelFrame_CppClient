@@ -157,15 +157,16 @@ if(MSVC)
             COMPILE_FLAGS "/MTd"
         )
         
-        set (protolib ${protolib_dir}/libprotobufd.lib ${protolib_dir}/libprotobuf-lited.lib ${protolib_dir}/libprotocd.lib)
+        set (protolib ${protolib_dir}libprotobufd.lib ${protolib_dir}libprotobuf-lited.lib ${protolib_dir}libprotocd.lib)
     ELSE()
         set_target_properties( ${PROJECT_NAME} PROPERTIES
             COMPILE_FLAGS "/MT"
         )
-        set (protolib ${protolib_dir}/libprotobuf.lib ${protolib_dir}/libprotobuf-lite.lib ${protolib_dir}/libprotoc.lib)
+        set (protolib ${protolib_dir}libprotobuf.lib ${protolib_dir}libprotobuf-lite.lib ${protolib_dir}libprotoc.lib)
     ENDIF()
     
 endif()
+message(${protolib})
 # 设置工作目录
 # set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY 
 #     ${CMAKE_SOURCE_DIR}/resources
