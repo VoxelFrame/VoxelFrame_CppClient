@@ -92,5 +92,6 @@
                 // "cursorDown",
             ]
         },
-    ]
+    ],
+    "cmake.generator": "MinGW Makefiles",
 }
