@@ -5,7 +5,7 @@ namespace DrawSys
 {
     void doDraw();
     bool init();
-    void drawWindowInfo();
+    // void drawWindowInfo();
 
 } // namespace DrawSys
 
