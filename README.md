@@ -2,7 +2,11 @@
 
 ## 当前测验可以直接编译的开发环境
 
-windows下的mingw和msvc均可编译
+还是推荐使用MSVC
+
+![image-20210205154227006](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205154227.png)
+
+~~windows下的mingw和msvc均可编译~~
 
 网络库接口支持的是 _WIN32_WINNT>=0x0600，vista及后来的win版本，像我的qt的gcc里面描述的就是0x0520，会导致编译不过，需要手动修改
 
@@ -28,7 +32,7 @@ vscode
 
 #### 安装一些必要的插件
 
-![image-20210205004832320](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004832.png)![image-20210205004850848](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004850.png)![image-20210205004947972](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004948.png)![image-20210205004918480](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004918.png)
+![image-20210205004832320](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004832.png)![image-20210205004850848](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004850.png)![image-20210205004947972](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004948.png)![image-20210205004918480](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004918.png)        ![image-20210205154117520](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205154117.png)
 
 ## 使用了的库
 
@@ -37,3 +41,4 @@ glfw
 glad
 
 imgui
+
