@@ -31,6 +31,8 @@ namespace DrawSys
                                            "   FragColor = texture(mainTex,texCoord);\n"
                                            
                                            "}\n\0";
+        const char* vsPath = "./Shader/shader.vs";
+        const char* fsPath = "./Shader/shader.fs";
         unsigned int VBO, VAO,EBO;
         int shaderProgram;
         
@@ -40,6 +42,9 @@ namespace DrawSys
 
         static MapDrawer *getInstance();
         unsigned int LoadTexture(string path);
+        void AddShader(GLuint ShaderProgram, const char* ShaderText, GLenum ShaderType);
+        void LinkShaders();
+        bool ReadFile(const char* pFileName, string& outFile);
         void doDraw();
     };
 

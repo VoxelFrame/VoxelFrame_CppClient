@@ -6,51 +6,51 @@
 #include "string"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
-
+#include"stdio.h"
+#include <fstream>
 
 namespace DrawSys
 {
     using namespace std;
     MapDrawer::MapDrawer(/* args */)
     {
-        int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-        glCompileShader(vertexShader);
-        int success;
-        char infoLog[512];
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-        if (!success)
-        {
-            glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
-                      << infoLog << std::endl;
-        }
-        int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-        glCompileShader(fragmentShader);
-        // check for shader compile errors
-        glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-        if (!success)
-        {
-            glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
-                      << infoLog << std::endl;
-        }
-        shaderProgram = glCreateProgram();
-        glAttachShader(shaderProgram, vertexShader);
-        glAttachShader(shaderProgram, fragmentShader);
-        glLinkProgram(shaderProgram);
-        // check for linking errors
-        glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-        if (!success)
-        {
-            glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
-                      << infoLog << std::endl;
-        }
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragmentShader);
+        // int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+        // glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+        // glCompileShader(vertexShader);
+        // int success;
+        // char infoLog[512];
+        // glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+        // if (!success)
+        // {
+        //     glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        //     std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
+        //               << infoLog << std::endl;
+        // }
+        // int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+        // glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+        // glCompileShader(fragmentShader);
+        // // check for shader compile errors
+        // glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+        // if (!success)
+        // {
+        //     glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        //     std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
+        //               << infoLog << std::endl;
+        // }      
+        CompileShaders();
+        // glAttachShader(shaderProgram, vertexShader);
+        // glAttachShader(shaderProgram, fragmentShader);
+        // glLinkProgram(shaderProgram);
+        // // check for linking errors
+        // glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+        // if (!success)
+        // {
+        //     glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        //     std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
+        //               << infoLog << std::endl;
+        // }
+        // glDeleteShader(vertexShader);
+        // glDeleteShader(fragmentShader);
         float vertices[] =
             {
                 0.5f,-0.5f,-0.5f,       0.0f,0.0f,
@@ -117,6 +117,7 @@ namespace DrawSys
         
     }
 
+    //load texture
     unsigned int MapDrawer::LoadTexture(string path)
     {
         //load texture
@@ -143,5 +144,95 @@ namespace DrawSys
         }
 	    stbi_image_free(data);
         return texture;
+    }
+    
+    //compile shader program
+    void MapDrawer:: AddShader(GLuint ShaderProgram, const char* ShaderText, GLenum ShaderType)
+    {
+        GLuint Shader = glCreateShader(ShaderType);
+        if (Shader == 0) 
+        {
+            fprintf(stderr, "Error creating shader type %d\n", ShaderType);
+            exit(1);
+        }
+        glShaderSource(Shader, 1, &ShaderText, NULL);
+        glCompileShader(Shader);
+        GLint success;
+        glGetShaderiv(Shader, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            GLchar InfoLog[1024];
+            glGetShaderInfoLog(Shader, 1024, NULL, InfoLog);
+            fprintf(stderr, "Error compiling shader type %d: '%s'\n", ShaderType, InfoLog);
+            exit(1);
+        }
+
+        glAttachShader(ShaderProgram, Shader);
+    }
+
+    //link shader programs
+    void MapDrawer::CompileShaders() 
+    {
+        shaderProgram = glCreateProgram();
+        if (shaderProgram == 0)
+        {
+            fprintf(stderr, "Error creating shader program\n");
+            exit(1);
+        }  
+
+        string vShader, fShader;
+        if (!ReadFile(vsPath, vShader)) 
+        {
+            exit(1);
+        };
+        if (!ReadFile(fsPath, fShader)) 
+        {
+            exit(1);
+        };
+
+        AddShader(shaderProgram, vShader.c_str(), GL_VERTEX_SHADER);
+        AddShader(shaderProgram, fShader.c_str(), GL_FRAGMENT_SHADER);
+        GLint Success = 0;
+        GLchar ErrorLog[1024] = { 0 };
+        glLinkProgram(shaderProgram);
+        glGetProgramiv(shaderProgram, GL_LINK_STATUS, &Success);
+        if (Success == 0) 
+        {
+            glGetProgramInfoLog(shaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
+            fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
+            exit(1);
+        }
+
+        glValidateProgram(shaderProgram);
+        glGetProgramiv(shaderProgram, GL_VALIDATE_STATUS, &Success);
+        if (!Success) 
+        {
+            glGetProgramInfoLog(shaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
+            fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
+            exit(1);
+        }
+        glUseProgram(shaderProgram);
+    }
+
+    //read shader file    
+    bool MapDrawer::ReadFile(const char* pFileName, string& outFile) 
+    {
+        ifstream f(pFileName);   
+        bool ret = false;   
+        if (f.is_open()) 
+        {
+            string line;
+            while (getline(f, line)) 
+            {
+                outFile.append(line);
+                outFile.append("\n");
+            }       
+            f.close();       
+            ret = true;
+        }
+        else 
+        {
+            cout<<"cna't read file:"+*pFileName<<endl;
+        }      
+        return ret;
     }
 } // namespace DrawSys
