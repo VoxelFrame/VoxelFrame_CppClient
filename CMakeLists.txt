@@ -61,6 +61,9 @@ include_directories (${GLFW_DIR}/include)
 set (GLM_DIR ${3RD_DIR}/glm)
 include_directories (${GLM_DIR}/include)
 
+#stb
+set (STB_DIR ${3RD_DIR}/stb_image)
+include_directories(${STB_DIR}/include)
 # glad
 set (GLAD_DIR ${3RD_DIR}/glad)
 include_directories (${GLAD_DIR}/include)

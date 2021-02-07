@@ -9,7 +9,8 @@
                 "${workspaceFolder}/third/glm/include",
                 "${workspaceFolder}/third/brynet/include",
                 "${workspaceFolder}/third/protobuff/src",
-                "${workspaceFolder}/third/vf_imgui/imgui"
+                "${workspaceFolder}/third/vf_imgui/imgui",
+                "${workspaceFolder}/third/stb_image/include",
             ],
             "defines": [
                 "_DEBUG",
@@ -22,9 +23,6 @@
             "cppStandard": "c++11",
             "intelliSenseMode": "msvc-x64",
             "compileCommands": "${workspaceFolder}/build/compile_commands.json"
-            // "configurationProvider": "ms-vscode.cmake-tools"
-            ,
-            //"configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4

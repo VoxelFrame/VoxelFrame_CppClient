@@ -8,9 +8,10 @@
 // #pragma comment(lib, "glfw3.lib")
 #pragma comment(lib, "ws2_32.lib")
 // #pragma comment(lib,"lib文件名或路径")
-
+#include "stb_image.h"
 int main()
 {
+
     if (!DrawSys::init())
     {
         return -1; //启动失败
