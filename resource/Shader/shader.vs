@@ -5,6 +5,6 @@ out vec2 texCoord;
 uniform mat4 rotate;
 void main()
 {
-    gl_Position = rotate * vec4(aPos, 1.0);
+    gl_Position = vec4(aPos, 1.0);
     texCoord=aTexCoord;
 }

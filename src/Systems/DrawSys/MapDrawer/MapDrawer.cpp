@@ -9,90 +9,80 @@
 #include"stdio.h"
 #include <fstream>
 
+#define BLOCKSIZE 1.0f
+
 namespace DrawSys
 {
     using namespace std;
     MapDrawer::MapDrawer(/* args */)
-    {
-        // int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        // glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-        // glCompileShader(vertexShader);
-        // int success;
-        // char infoLog[512];
-        // glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-        // if (!success)
-        // {
-        //     glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        //     std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
-        //               << infoLog << std::endl;
-        // }
-        // int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        // glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-        // glCompileShader(fragmentShader);
-        // // check for shader compile errors
-        // glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-        // if (!success)
-        // {
-        //     glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        //     std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
-        //               << infoLog << std::endl;
-        // }      
-        CompileShaders();
-        // glAttachShader(shaderProgram, vertexShader);
-        // glAttachShader(shaderProgram, fragmentShader);
-        // glLinkProgram(shaderProgram);
-        // // check for linking errors
-        // glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-        // if (!success)
-        // {
-        //     glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        //     std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
-        //               << infoLog << std::endl;
-        // }
-        // glDeleteShader(vertexShader);
-        // glDeleteShader(fragmentShader);
-        float vertices[] =
-            {
-                0.5f,-0.5f,-0.5f,       0.0f,0.0f,
-                0.5f,0.5f,-0.5f,        1.0f,0.0f,
-                -0.5f, 0.5f,-0.5f,      1.0f,1.0f,
-                -0.5f,-0.5f,-0.5f,      0.0f,1.0f,
-                0.5f,-0.5f,0.5f,        0.0f,0.0f,
-                0.5f,0.5f,0.5f,         1.0f,0.0f,
-                -0.5f,0.5f,0.5f,        1.0f,1.0f,
-                -0.5f,-0.5f,0.5f,       0.0f,1.0f,
-            };
-        unsigned int indices[] =
-            {
-                4,5,6, //前
-                6,7,4,
-                2,1,0, //后
-                0,3,2,
-                2,3,7, //左
-                7,6,2,
-                1,5,4, //右
-                4,0,1,
-                5,1,2, //上
-                2,6,5,
-                3,0,4, //下
-                4,7,3,
-            };
+    {    
+        // float vertices[] =
+        //     {
+        //         0.5f,-0.5f, 0.5f,      0.0f,0.0f,  //正面
+        //         -0.5f,-0.5f,  0.5f,      1.0f,0.0f,
+        //         -0.5f,0.5f,0.5f,       1.0f,1.0f,
 
+        //         -0.5f,0.5f,0.5f,       1.0f,1.0f,
+        //         0.5f,0.5f,0.5f,      0.0f,1.0f,
+        //         0.5f,-0.5f,0.5f,       0.0f,0.0f,
+
+        //         -0.5f,0.5f,-0.5f,      0.0f,0.0f,  //反面
+        //         0.5f,0.5f,-0.5f,       1.0f,0.0f,
+        //         0.5f,-0.5f,-0.5f,      1.0f,1.0f,
+
+        //         0.5f,-0.5f,-0.5f,      1.0f,1.0f,
+        //         -0.5f,-0.5f,-0.5f,     0.0f,1.0f,
+        //         -0.5f,0.5f,-0.5f,      0.0f,0.0f,
+
+        //         -0.5f, 0.5f,-0.5f,     0.0f,0.0f,  //左面
+        //         -0.5f,-0.5f,-0.5f,     1.0f,0.0f,
+        //         -0.5f,-0.5f,0.5f,      1.0f,1.0f,
+
+        //         -0.5f,-0.5f,0.5f,      1.0f,1.0f,
+        //         -0.5f,0.5f,0.5f,       0.0f,1.0f,
+        //         -0.5f,0.5f,-0.5f,      0.0f,0.0f,
+
+        //         0.5f,0.5f,-0.5f,       0.0f,0.0f,   //右面
+        //         0.5f,0.5f,0.5f,        1.0f,0.0f,
+        //         0.5f,-0.5f,0.5f,       1.0f,1.0f,
+
+        //         0.5f,-0.5f,0.5f,       1.0f,1.0f,
+        //         0.5f,-0.5f,-0.5f,      0.0f,1.0f,
+        //         0.5f,0.5f,-0.5f,       0.0f,0.0f,
+
+        //         0.5f,0.5f,0.5f,        0.0f,0.0f,   //上面
+        //         0.5f,0.5f,-0.5f,       1.0f,0.0f,
+        //         -0.5f,0.5f,-0.5f,      1.0f,1.0f,
+
+        //         -0.5f,0.5f,-0.5f,      1.0f,1.0f,   
+        //         -0.5f,0.5f,0.5f,       0.0f,1.0f,
+        //         0.5f,0.5f,0.5f,        0.0f,0.0f,
+
+        //         -0.5f,-0.5f,-0.5f,     0.0f,0.0f,   //下面
+        //         0.5f,-0.5f,-0.5f,      1.0f,0.0f,
+        //         0.5f,-0.5f,0.5f,       1.0f,1.0f,
+
+        //         0.5f,-0.5f,0.5f,       1.0f,1.0f,   
+        //         -0.5f,-0.5f,0.5f,      0.0f,1.0f,
+        //         -0.5f,-0.5f,-0.5f,     0.0f,0.0f,
+        //     };
+        CompileShaders();        
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
-        glGenBuffers(1, &EBO);
+        // glGenBuffers(1, &EBO);
         glBindVertexArray(VAO);
 
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (const GLvoid*)(2*sizeof(float)));
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (const GLvoid*)(3*sizeof(float)));
         glEnableVertexAttribArray(1);
+        
     }
 
     MapDrawer *MapDrawer::getInstance()
@@ -103,17 +93,29 @@ namespace DrawSys
 
     void MapDrawer::doDraw()
     {
-        // draw our first triangle
-        unsigned int img=LoadTexture("./resource/images/default.png");
-        glEnable(GL_TEXTURE_2D);
-        glUseProgram(shaderProgram);
+        // draw our first triangle      
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA  );
         glm::mat4 rotate = glm::mat4(1.0f);
         rotate = glm::rotate(rotate, 0.5f * (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "rotate"), 1, GL_FALSE, glm::value_ptr(rotate));
-        glActiveTexture(GL_TEXTURE0);
-        glUniform1i(glGetUniformLocation(shaderProgram, "mainTex"), 0); 
+        glm::vec3 offset=glm::vec3(0.5f,0.5f,0.0f);
+        glUniform3fv(glGetUniformLocation(shaderProgram,"offset"),1,glm::value_ptr(offset));
+        // glActiveTexture(GL_TEXTURE0);
+        // glUniform1i(glGetUniformLocation(shaderProgram, "mainTex"), 0); 
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        glEnable(GL_DEPTH_TEST);
+        unsigned int img1=LoadTexture("./resource/images/1.png");
+        glDrawArrays(GL_TRIANGLES,0,6);
+        unsigned int img2=LoadTexture("./resource/images/2.png");       
+        glDrawArrays(GL_TRIANGLES,6,6);
+        unsigned int img3=LoadTexture("./resource/images/3.png");
+        glDrawArrays(GL_TRIANGLES,12,6);
+        unsigned int img4=LoadTexture("./resource/images/4.png");
+        glDrawArrays(GL_TRIANGLES,18,6);
+        unsigned int img5=LoadTexture("./resource/images/5.png");
+        glDrawArrays(GL_TRIANGLES,24,6);
+        unsigned int img6=LoadTexture("./resource/images/6.png");
+        glDrawArrays(GL_TRIANGLES,30,6);
         
     }
 
@@ -137,10 +139,6 @@ namespace DrawSys
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         }
 	    stbi_image_free(data);
         return texture;

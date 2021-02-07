@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include<iostream>
+
 using namespace std;
 
 namespace DrawSys
@@ -11,40 +12,71 @@ namespace DrawSys
     class MapDrawer
     {
     private:
-        /* data */
-        const char *vertexShaderSource = "#version 330 core\n"
-                                         "layout (location = 0) in vec3 aPos;\n"
-                                         "layout (location = 1) in vec2 aTexCoord;\n"
-                                         "out vec2 texCoord;\n"
-                                         "uniform mat4 rotate;\n"
-                                         "void main()\n"
-                                         "{\n"
-                                         "   gl_Position = rotate * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                         "   texCoord=aTexCoord;\n"
-                                         "}\0";
-        const char *fragmentShaderSource = "#version 330 core\n"
-                                           "out vec4 FragColor;\n"
-                                           "in vec2 texCoord;\n"
-                                           "uniform sampler2D mainTex;\n"
-                                           "void main()\n"
-                                           "{\n"
-                                           "   FragColor = texture(mainTex,texCoord);\n"
-                                           
-                                           "}\n\0";
         const char* vsPath = "./resource/Shader/shader.vs";
         const char* fsPath = "./resource/Shader/shader.fs";
         unsigned int VBO, VAO,EBO;
         int shaderProgram;
-        
+        const float vertices[180] =
+            {
+                0.5f,-0.5f, 0.5f,      0.0f,0.0f,  //正面
+                -0.5f,-0.5f,  0.5f,    1.0f,0.0f,
+                -0.5f,0.5f,0.5f,       1.0f,1.0f,
+
+                -0.5f,0.5f,0.5f,       1.0f,1.0f,
+                0.5f,0.5f,0.5f,        0.0f,1.0f,
+                0.5f,-0.5f,0.5f,       0.0f,0.0f,
+
+                -0.5f,0.5f,-0.5f,      0.0f,0.0f,  //反面
+                0.5f,0.5f,-0.5f,       1.0f,0.0f,
+                0.5f,-0.5f,-0.5f,      1.0f,1.0f,
+
+                0.5f,-0.5f,-0.5f,      1.0f,1.0f,
+                -0.5f,-0.5f,-0.5f,     0.0f,1.0f,
+                -0.5f,0.5f,-0.5f,      0.0f,0.0f,
+
+                -0.5f, 0.5f,-0.5f,     0.0f,0.0f,  //左面
+                -0.5f,-0.5f,-0.5f,     1.0f,0.0f,
+                -0.5f,-0.5f,0.5f,      1.0f,1.0f,
+
+                -0.5f,-0.5f,0.5f,      1.0f,1.0f,
+                -0.5f,0.5f,0.5f,       0.0f,1.0f,
+                -0.5f,0.5f,-0.5f,      0.0f,0.0f,
+
+                0.5f,0.5f,-0.5f,       0.0f,0.0f,   //右面
+                0.5f,0.5f,0.5f,        1.0f,0.0f,
+                0.5f,-0.5f,0.5f,       1.0f,1.0f,
+
+                0.5f,-0.5f,0.5f,       1.0f,1.0f,
+                0.5f,-0.5f,-0.5f,      0.0f,1.0f,
+                0.5f,0.5f,-0.5f,       0.0f,0.0f,
+
+                0.5f,0.5f,0.5f,        0.0f,0.0f,   //上面
+                0.5f,0.5f,-0.5f,       1.0f,0.0f,
+                -0.5f,0.5f,-0.5f,      1.0f,1.0f,
+
+                -0.5f,0.5f,-0.5f,      1.0f,1.0f,   
+                -0.5f,0.5f,0.5f,       0.0f,1.0f,
+                0.5f,0.5f,0.5f,        0.0f,0.0f,
+
+                -0.5f,-0.5f,-0.5f,     0.0f,0.0f,   //下面
+                0.5f,-0.5f,-0.5f,      1.0f,0.0f,
+                0.5f,-0.5f,0.5f,       1.0f,1.0f,
+
+                0.5f,-0.5f,0.5f,       1.0f,1.0f,   
+                -0.5f,-0.5f,0.5f,      0.0f,1.0f,
+                -0.5f,-0.5f,-0.5f,     0.0f,0.0f,
+            };
+
+        //const enum maps{grass,blue};
 
     public:
         MapDrawer(/* args */);
-
         static MapDrawer *getInstance();
         unsigned int LoadTexture(string path);
         void AddShader(GLuint ShaderProgram, const char* ShaderText, GLenum ShaderType);
         void CompileShaders();
         bool ReadFile(const char* pFileName, string& outFile);
+        float* GenerateVertices(float x,float y,float z);
         void doDraw();
     };
 
