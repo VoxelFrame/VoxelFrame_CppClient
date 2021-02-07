@@ -48,14 +48,14 @@ namespace DrawSys
         glDeleteShader(fragmentShader);
         float vertices[] =
             {
-                0.5f,-0.5f,-0.5f,  
-                0.5f,0.5f,-0.5f,    
-                -0.5f, 0.5f,-0.5f,  
-                -0.5f,-0.5f,-0.5f,  
-                0.5f,-0.5f,0.5f,   
-                0.5f,0.5f,0.5f,     
-                -0.5f,0.5f,0.5f,    
-                -0.5f,-0.5f,0.5f,   
+                0.5f,-0.5f,-0.5f,       0.0f,0.0f,
+                0.5f,0.5f,-0.5f,        1.0f,0.0f,
+                -0.5f, 0.5f,-0.5f,      1.0f,1.0f,
+                -0.5f,-0.5f,-0.5f,      0.0f,1.0f,
+                0.5f,-0.5f,0.5f,        0.0f,0.0f,
+                0.5f,0.5f,0.5f,         1.0f,0.0f,
+                -0.5f,0.5f,0.5f,        1.0f,1.0f,
+                -0.5f,-0.5f,0.5f,       0.0f,1.0f,
             };
         unsigned int indices[] =
             {
@@ -84,8 +84,10 @@ namespace DrawSys
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
         glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (const GLvoid*)(2*sizeof(float)));
+        glEnableVertexAttribArray(1);
     }
 
     MapDrawer *MapDrawer::getInstance()
@@ -101,11 +103,13 @@ namespace DrawSys
         glEnable(GL_TEXTURE_2D);
         glUseProgram(shaderProgram);
         glm::mat4 rotate = glm::mat4(1.0f);
-        rotate = glm::rotate(rotate, 2 * (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
-        unsigned int rotateLoc = glGetUniformLocation(shaderProgram, "rotate");
-        glUniformMatrix4fv(rotateLoc, 1, GL_FALSE, glm::value_ptr(rotate));
+        rotate = glm::rotate(rotate, 0.5f * (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "rotate"), 1, GL_FALSE, glm::value_ptr(rotate));
+        glActiveTexture(GL_TEXTURE0);
+        glUniform1i(glGetUniformLocation(shaderProgram, "mainTex"), 0); 
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        
     }
 
     unsigned int MapDrawer::LoadTexture(string path)
@@ -128,7 +132,7 @@ namespace DrawSys
         size = ftell(img) - 54;
         unsigned char *data = (unsigned char *)malloc(size);
         fseek(img, 54, SEEK_SET); // image data
-        fread(data, size, 1, img);
+        fread(data, 1, size, img);
         fclose(img);
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
