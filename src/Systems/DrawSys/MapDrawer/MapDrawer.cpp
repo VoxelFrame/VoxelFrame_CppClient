@@ -4,6 +4,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "string"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+
 
 namespace DrawSys
 {
@@ -117,34 +121,27 @@ namespace DrawSys
     {
         //load texture
         unsigned int texture;
-        FILE *img = NULL;
-        errno_t error;
-        if((error=fopen_s(&img, path.c_str(), "rb"))!=0)
-        {
-            cout<<"File"+path+"can not open"<<endl;
-        }
-        unsigned long width = 0;
-        unsigned long height = 0;
-        unsigned long size = 0;
-        fseek(img, 18, SEEK_SET);
-        fread(&width, 4, 1, img);
-        fread(&height, 4, 1, img);
-        fseek(img, 0, SEEK_END);
-        size = ftell(img) - 54;
-        unsigned char *data = (unsigned char *)malloc(size);
-        fseek(img, 54, SEEK_SET); // image data
-        fread(data, 1, size, img);
-        fclose(img);
         glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, 3, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        int width, height, nrComponents;
+        unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrComponents, 0);
         if (data)
         {
-            free(data);
+            GLenum format = 3;
+            if (nrComponents == 1)
+                format = GL_RED;
+            else if (nrComponents == 3)
+                format = GL_RGB;
+            else if (nrComponents == 4)
+                format = GL_RGBA;
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         }
+	    stbi_image_free(data);
         return texture;
     }
 } // namespace DrawSys
