@@ -8,14 +8,13 @@
 #include "stb_image.h"
 #include"stdio.h"
 #include <fstream>
-
 #define BLOCKSIZE 1.0f
 
 namespace DrawSys
 {
     using namespace std;
     MapDrawer::MapDrawer(/* args */)
-    {           
+    {    
         CompileShaders();        
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
@@ -55,20 +54,23 @@ namespace DrawSys
 
         glm::vec3 offset=glm::vec3(0.0f,0.0f,0.0f);
         glUniform3fv(glGetUniformLocation(shaderProgram,"offset"),1,glm::value_ptr(offset));
-        //DrawCube(glm::vec3(0.5f,0.5f,0.0f));
-        //DrawCube(glm::vec3(-0.5f,-0.5f,0.0f));
-
+        // float x=(float)sin(glfwGetTime())*100.0f;
+        // float z=(float)cos(glfwGetTime())*100.0f;
+        camera.LookAt(shaderProgram,glm::vec3(0.0f,0.0f,0.0f));
+        // DrawCube(glm::vec3(0.5f,0.5f,0.0f));
+        // DrawCube(glm::vec3(-0.5f,-0.5f,0.0f));
+        DrawCube(glm::vec3(0.0f,0.0f,0.0f));
         //test data generate
-        ChunkModel test;
+        //ChunkModel test;
         // BlockKey temp={rand()%2,1};
         // test.blockDataArr[0]=temp;
-        for (int i=0;i<chunkSize;i++)
-        {
-            BlockKey temp={rand()%2,1};
-            test.blockDataArr[i]=temp;
-        }        
+        // for (int i=0;i<chunkSize;i++)
+        // {
+        //     BlockKey temp={rand()%2,1};
+        //     test.blockDataArr[i]=temp;
+        // }        
         //generate end
-        DrawChunk(test,glm::vec3(0.5,0.5,0));
+        // DrawChunk(test,glm::vec3(0.5,0.5,0));
     }
     
 

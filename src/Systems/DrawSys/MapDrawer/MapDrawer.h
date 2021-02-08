@@ -6,6 +6,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <Models/Datadef/data.h>
+#include"Camera.h"
 using namespace std;
 
 namespace DrawSys
@@ -17,6 +18,8 @@ namespace DrawSys
         const char* fsPath = "./resource/Shader/shader.fs";
         unsigned int VBO, VAO,EBO;
         int shaderProgram;
+        Camera camera;
+        unsigned int textures[6];
         const float vertices[180] =
             {
                 0.5f,-0.5f, 0.5f,      0.0f,0.0f,  //正面
@@ -68,8 +71,6 @@ namespace DrawSys
                 -0.5f,-0.5f,-0.5f,     0.0f,0.0f,
             };
 
-        unsigned int textures[6];
-        //const enum maps{grass,blue};
 
     public:
         MapDrawer(/* args */);
