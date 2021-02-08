@@ -15,74 +15,30 @@ namespace DrawSys
 {
     using namespace std;
     MapDrawer::MapDrawer(/* args */)
-    {    
-        // float vertices[] =
-        //     {
-        //         0.5f,-0.5f, 0.5f,      0.0f,0.0f,  //正面
-        //         -0.5f,-0.5f,  0.5f,      1.0f,0.0f,
-        //         -0.5f,0.5f,0.5f,       1.0f,1.0f,
-
-        //         -0.5f,0.5f,0.5f,       1.0f,1.0f,
-        //         0.5f,0.5f,0.5f,      0.0f,1.0f,
-        //         0.5f,-0.5f,0.5f,       0.0f,0.0f,
-
-        //         -0.5f,0.5f,-0.5f,      0.0f,0.0f,  //反面
-        //         0.5f,0.5f,-0.5f,       1.0f,0.0f,
-        //         0.5f,-0.5f,-0.5f,      1.0f,1.0f,
-
-        //         0.5f,-0.5f,-0.5f,      1.0f,1.0f,
-        //         -0.5f,-0.5f,-0.5f,     0.0f,1.0f,
-        //         -0.5f,0.5f,-0.5f,      0.0f,0.0f,
-
-        //         -0.5f, 0.5f,-0.5f,     0.0f,0.0f,  //左面
-        //         -0.5f,-0.5f,-0.5f,     1.0f,0.0f,
-        //         -0.5f,-0.5f,0.5f,      1.0f,1.0f,
-
-        //         -0.5f,-0.5f,0.5f,      1.0f,1.0f,
-        //         -0.5f,0.5f,0.5f,       0.0f,1.0f,
-        //         -0.5f,0.5f,-0.5f,      0.0f,0.0f,
-
-        //         0.5f,0.5f,-0.5f,       0.0f,0.0f,   //右面
-        //         0.5f,0.5f,0.5f,        1.0f,0.0f,
-        //         0.5f,-0.5f,0.5f,       1.0f,1.0f,
-
-        //         0.5f,-0.5f,0.5f,       1.0f,1.0f,
-        //         0.5f,-0.5f,-0.5f,      0.0f,1.0f,
-        //         0.5f,0.5f,-0.5f,       0.0f,0.0f,
-
-        //         0.5f,0.5f,0.5f,        0.0f,0.0f,   //上面
-        //         0.5f,0.5f,-0.5f,       1.0f,0.0f,
-        //         -0.5f,0.5f,-0.5f,      1.0f,1.0f,
-
-        //         -0.5f,0.5f,-0.5f,      1.0f,1.0f,   
-        //         -0.5f,0.5f,0.5f,       0.0f,1.0f,
-        //         0.5f,0.5f,0.5f,        0.0f,0.0f,
-
-        //         -0.5f,-0.5f,-0.5f,     0.0f,0.0f,   //下面
-        //         0.5f,-0.5f,-0.5f,      1.0f,0.0f,
-        //         0.5f,-0.5f,0.5f,       1.0f,1.0f,
-
-        //         0.5f,-0.5f,0.5f,       1.0f,1.0f,   
-        //         -0.5f,-0.5f,0.5f,      0.0f,1.0f,
-        //         -0.5f,-0.5f,-0.5f,     0.0f,0.0f,
-        //     };
+    {           
         CompileShaders();        
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
-        // glGenBuffers(1, &EBO);
         glBindVertexArray(VAO);
-
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBindVertexArray(VAO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (const GLvoid*)(3*sizeof(float)));
         glEnableVertexAttribArray(1);
-        
+        glEnable(GL_DEPTH_TEST);
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA  );
+        glActiveTexture(GL_TEXTURE0);
+        glUniform1i(glGetUniformLocation(shaderProgram, "mainTex"), 0); 
+        //glEnable(GL_CULL_FACE);
+        for(int i=1;i<=6;i++)
+        {
+            char path[30];
+            sprintf_s(path,"./resource/images/%d.png",i);
+            textures[i-1]=LoadTexture(path);
+        }
+      
     }
 
     MapDrawer *MapDrawer::getInstance()
@@ -92,32 +48,29 @@ namespace DrawSys
     }
 
     void MapDrawer::doDraw()
-    {
-        // draw our first triangle      
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA  );
+    {               
         glm::mat4 rotate = glm::mat4(1.0f);
-        rotate = glm::rotate(rotate, 0.5f * (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
+        rotate = glm::rotate(rotate, 1.0f , glm::vec3(1.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "rotate"), 1, GL_FALSE, glm::value_ptr(rotate));
-        glm::vec3 offset=glm::vec3(0.5f,0.5f,0.0f);
+
+        glm::vec3 offset=glm::vec3(0.0f,0.0f,0.0f);
         glUniform3fv(glGetUniformLocation(shaderProgram,"offset"),1,glm::value_ptr(offset));
-        // glActiveTexture(GL_TEXTURE0);
-        // glUniform1i(glGetUniformLocation(shaderProgram, "mainTex"), 0); 
-        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glEnable(GL_DEPTH_TEST);
-        unsigned int img1=LoadTexture("./resource/images/1.png");
-        glDrawArrays(GL_TRIANGLES,0,6);
-        unsigned int img2=LoadTexture("./resource/images/2.png");       
-        glDrawArrays(GL_TRIANGLES,6,6);
-        unsigned int img3=LoadTexture("./resource/images/3.png");
-        glDrawArrays(GL_TRIANGLES,12,6);
-        unsigned int img4=LoadTexture("./resource/images/4.png");
-        glDrawArrays(GL_TRIANGLES,18,6);
-        unsigned int img5=LoadTexture("./resource/images/5.png");
-        glDrawArrays(GL_TRIANGLES,24,6);
-        unsigned int img6=LoadTexture("./resource/images/6.png");
-        glDrawArrays(GL_TRIANGLES,30,6);
-        
+        //DrawCube(glm::vec3(0.5f,0.5f,0.0f));
+        //DrawCube(glm::vec3(-0.5f,-0.5f,0.0f));
+
+        //test data generate
+        ChunkModel test;
+        // BlockKey temp={rand()%2,1};
+        // test.blockDataArr[0]=temp;
+        for (int i=0;i<chunkSize;i++)
+        {
+            BlockKey temp={rand()%2,1};
+            test.blockDataArr[i]=temp;
+        }        
+        //generate end
+        DrawChunk(test,glm::vec3(0.5,0.5,0));
     }
+    
 
     //load texture
     unsigned int MapDrawer::LoadTexture(string path)
@@ -232,5 +185,31 @@ namespace DrawSys
             cout<<"cna't read file:"+*pFileName<<endl;
         }      
         return ret;
+    }
+
+    void MapDrawer::DrawCube(glm::vec3 offset) 
+    {
+         for(int i=0;i<6;i++)
+        {
+            glBindTexture(GL_TEXTURE_2D, textures[i]);
+            glUniform3fv(glGetUniformLocation(shaderProgram,"offset"),1,glm::value_ptr(offset));
+            glDrawArrays(GL_TRIANGLES,i*6,6);
+        }      
+    }
+    
+    void MapDrawer::DrawChunk(ChunkModel data,glm::vec3 pos) 
+    {
+        glm::vec3 zero= pos-glm::vec3(CHUNK_LNEGTH/2,CHUNK_LNEGTH/2,CHUNK_LNEGTH/2);
+        for(int x=0;x<CHUNK_LNEGTH;x++)
+       {
+            for(int z=0;z<CHUNK_LNEGTH;z++)
+           {
+                for(int y=0;y<CHUNK_LNEGTH;y++)
+               {
+                   glm::vec3 position=zero+glm::vec3(x+0.5,y+0.5,z+0.5);
+                   DrawCube(position);
+               }
+           }
+       }
     }
 } // namespace DrawSys

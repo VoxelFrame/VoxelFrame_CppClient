@@ -1,7 +1,7 @@
 #include <map>
-
+#define CHUNK_LNEGTH 32
 //区块大小
-const int chunkSize = 64 * 64 * 64;
+const int chunkSize = CHUNK_LNEGTH * CHUNK_LNEGTH * CHUNK_LNEGTH;
 
 //单个块
 typedef struct

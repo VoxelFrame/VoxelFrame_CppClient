@@ -3,8 +3,9 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include<iostream>
-
+#include <iostream>
+#include <glm/glm.hpp>
+#include <Models/Datadef/data.h>
 using namespace std;
 
 namespace DrawSys
@@ -67,6 +68,7 @@ namespace DrawSys
                 -0.5f,-0.5f,-0.5f,     0.0f,0.0f,
             };
 
+        unsigned int textures[6];
         //const enum maps{grass,blue};
 
     public:
@@ -78,6 +80,8 @@ namespace DrawSys
         bool ReadFile(const char* pFileName, string& outFile);
         float* GenerateVertices(float x,float y,float z);
         void doDraw();
+        void DrawCube(glm::vec3 offset);
+        void DrawChunk(ChunkModel data,glm::vec3 pos);
     };
 
 } // namespace DrawSys
