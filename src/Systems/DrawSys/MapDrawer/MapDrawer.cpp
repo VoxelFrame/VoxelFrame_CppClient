@@ -49,17 +49,48 @@ namespace DrawSys
     void MapDrawer::doDraw()
     {               
         glm::mat4 rotate = glm::mat4(1.0f);
-        rotate = glm::rotate(rotate, 1.0f , glm::vec3(1.0f, 1.0f, 0.0f));
+        rotate = glm::rotate(rotate, 1.0f*(float)glfwGetTime() , glm::vec3(1.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "rotate"), 1, GL_FALSE, glm::value_ptr(rotate));
 
         glm::vec3 offset=glm::vec3(0.0f,0.0f,0.0f);
         glUniform3fv(glGetUniformLocation(shaderProgram,"offset"),1,glm::value_ptr(offset));
-        // float x=(float)sin(glfwGetTime())*100.0f;
-        // float z=(float)cos(glfwGetTime())*100.0f;
+        // float x=(float)sin(glfwGetTime())*1.0f;
+        // float z=(float)cos(glfwGetTime())*1.0f;
         camera.LookAt(shaderProgram,glm::vec3(0.0f,0.0f,0.0f));
+        camera.SetViewRange(shaderProgram,60.0f,800.0f,600.0f);
         // DrawCube(glm::vec3(0.5f,0.5f,0.0f));
         // DrawCube(glm::vec3(-0.5f,-0.5f,0.0f));
         DrawCube(glm::vec3(0.0f,0.0f,0.0f));
+
+        DrawCube(glm::vec3(1.0f,0.0f,0.0f));
+        DrawCube(glm::vec3(-1.0f,0.0f,0.0f));
+        DrawCube(glm::vec3(0.0f,0.0f,1.0f));
+        DrawCube(glm::vec3(0.0f,0.0f,-1.0f));
+
+        DrawCube(glm::vec3(1.0f,0.0f,1.0f));
+        DrawCube(glm::vec3(-1.0f,0.0f,1.0f));
+        DrawCube(glm::vec3(1.0f,0.0f,-1.0f));
+        DrawCube(glm::vec3(-1.0f,0.0f,-1.0f));
+
+        DrawCube(glm::vec3(2.0f,0.0f,2.0f));
+        DrawCube(glm::vec3(2.0f,0.0f,-2.0f));
+        DrawCube(glm::vec3(-2.0f,0.0f,2.0f));
+        DrawCube(glm::vec3(-2.0f,0.0f,-2.0f));
+
+        DrawCube(glm::vec3(2.0f,0.0f,1.0f));
+        DrawCube(glm::vec3(2.0f,0.0f,0.0f));
+        DrawCube(glm::vec3(2.0f,0.0f,-1.0f));
+        DrawCube(glm::vec3(-2.0f,0.0f,1.0f));
+        DrawCube(glm::vec3(-2.0f,0.0f,0.0f));
+        DrawCube(glm::vec3(-2.0f,0.0f,-1.0f));
+
+        DrawCube(glm::vec3(1.0f,0.0f,2.0f));
+        DrawCube(glm::vec3(0.0f,0.0f,2.0f));
+        DrawCube(glm::vec3(-1.0f,0.0f,2.0f));
+        DrawCube(glm::vec3(1.0f,0.0f,-2.0f));
+        DrawCube(glm::vec3(0.0f,0.0f,-2.0f));
+        DrawCube(glm::vec3(-1.0f,0.0f,-2.0f));
+        //DrawCube(glm::vec3(0.0f,0.0f,0.0f));
         //test data generate
         //ChunkModel test;
         // BlockKey temp={rand()%2,1};
@@ -213,5 +244,33 @@ namespace DrawSys
                }
            }
        }
+    }
+    
+    void MapDrawer::Forward(float speed) 
+    {
+        glm::vec3 pos=camera.GetCameraPos();
+        pos+=glm::vec3(0.0f,0.0f,speed);
+        camera.SetCameraPos(pos);
+    }
+    
+    void MapDrawer::Backward(float speed) 
+    {
+        glm::vec3 pos=camera.GetCameraPos();
+        pos+=glm::vec3(0.0f,0.0f,-speed);
+        camera.SetCameraPos(pos);
+    }
+    
+    void MapDrawer::Leftward(float speed) 
+    {
+        glm::vec3 pos=camera.GetCameraPos();
+        pos+=glm::vec3(speed,0.0f,0.0f);
+        camera.SetCameraPos(pos);
+    }
+    
+    void MapDrawer::Rightward(float speed) 
+    {
+        glm::vec3 pos=camera.GetCameraPos();
+        pos+=glm::vec3(-speed,0.0f,0.0f);
+        camera.SetCameraPos(pos);
     }
 } // namespace DrawSys

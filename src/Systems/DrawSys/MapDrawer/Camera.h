@@ -9,14 +9,15 @@ namespace DrawSys
         private:
             glm::vec3 camerPos;
             glm::vec3 camerTarget;
-            glm::vec3 camerDirection;
-            glm::vec3 camerRight;
             glm::vec3 camerUp;
         public:
             Camera();
-            glm::vec3 GetCamerPos();
-            void SetCamerPos(glm::vec3 pos);
+            glm::vec3 GetCameraPos();
+            glm::vec3 GetCameraTarget();
+            void SetCameraPos(glm::vec3 pos);
+            void SetCameraTarget(glm::vec3 target);
             void LookAt(int shaderprogram,glm::vec3 target);
+            void SetViewRange(int shaderprogram,float angle,float height,float width);
             
     };
 }

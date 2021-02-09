@@ -8,17 +8,20 @@
 #include "./MapDrawer/MapDrawer.h"
 namespace DrawSys
 {
+    float deltatime=0.0f;
+    float lastframe=0.0f;
     void drawBegin();
     void drawMain();
     void drawEnd();
-    // int Render();
-    void processInput(GLFWwindow *window);
+    void processInput(GLFWwindow *window,int key, int scancode, int action, int mode);
+
     void doDraw()
     {
         drawBegin();
         drawMain();
         drawEnd();
     }
+
     //窗口大小变化时，重新设置视口
     void framebuff_size_callback(GLFWwindow *window, int width, int height)
     {
@@ -27,6 +30,7 @@ namespace DrawSys
         wim.Height = height;
         wim.Width = width;
     }
+
     bool init()
     {
         glfwInit(); //初始化GLFW
@@ -73,12 +77,9 @@ namespace DrawSys
 
     inline void drawBegin()
     {
-
-        //fpsStart = clock();
-        // double nowTime = glfwGetTime();
-        // control->elapseTime = nowTime - control->oldTime;
-        // control->oldTime = nowTime;
-
+        float currenttime=(float)glfwGetTime();
+        deltatime=currenttime-lastframe;
+        lastframe=currenttime;
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
@@ -87,7 +88,7 @@ namespace DrawSys
     {
         if (GuiSys::isRender)
         {
-            // Render();
+
             MapDrawer::getInstance()->doDraw();
         }
         GuiSys::renderGui();
@@ -97,21 +98,26 @@ namespace DrawSys
     inline void drawEnd()
     {
         WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
-        // CalcSys::calcWindowInfo();
-        // drawWindowInfo();
-
         //将存储在缓冲区中的像素颜色进行绘制，这里涉及到双缓冲的问题
         glfwSwapBuffers(windowInfoModel.window);
         //检查有没有触发什么事件（键盘输入、鼠标移动等)、窗口改变
         glfwPollEvents();
-        //control->keyPress();
+        glfwSetKeyCallback(windowInfoModel.window,processInput);
     }
 
 
-    void processInput(GLFWwindow *window)
+    void processInput(GLFWwindow *window,int key, int scancode, int action, int mode)
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
+        if(glfwGetKey(window,GLFW_KEY_W)==GLFW_PRESS)
+            MapDrawer::getInstance()->Forward(deltatime*20.0f);
+        if(glfwGetKey(window,GLFW_KEY_A)==GLFW_PRESS)
+            MapDrawer::getInstance()->Leftward(deltatime*20.0f);
+        if(glfwGetKey(window,GLFW_KEY_S)==GLFW_PRESS)
+            MapDrawer::getInstance()->Backward(deltatime*20.0f);
+        if(glfwGetKey(window,GLFW_KEY_D)==GLFW_PRESS)
+            MapDrawer::getInstance()->Rightward(deltatime*20.0f);
     }
 
 } // namespace DrawSys

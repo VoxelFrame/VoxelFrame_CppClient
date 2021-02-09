@@ -83,6 +83,10 @@ namespace DrawSys
         void doDraw();
         void DrawCube(glm::vec3 offset);
         void DrawChunk(ChunkModel data,glm::vec3 pos);
+        void Forward(float speed);
+        void Backward(float speed);
+        void Leftward(float speed);
+        void Rightward(float speed);
     };
 
 } // namespace DrawSys
