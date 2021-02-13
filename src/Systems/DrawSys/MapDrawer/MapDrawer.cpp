@@ -8,6 +8,7 @@
 #include "stb_image.h"
 #include"stdio.h"
 #include <fstream>
+#include"Camera.h"
 #define BLOCKSIZE 1.0f
 
 namespace DrawSys
@@ -15,6 +16,12 @@ namespace DrawSys
     using namespace std;
     MapDrawer::MapDrawer(/* args */)
     {    
+        shaderProgram = glCreateProgram();
+        if (shaderProgram == 0)
+        {
+            fprintf(stderr, "Error creating shader program\n");
+            exit(1);
+        }  
         CompileShaders();        
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
@@ -30,6 +37,8 @@ namespace DrawSys
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA  );
         glActiveTexture(GL_TEXTURE0);
         glUniform1i(glGetUniformLocation(shaderProgram, "mainTex"), 0); 
+        Camera::GetInstance().LookAt(shaderProgram,Camera::GetInstance().GetCameraTarget());
+        Camera::GetInstance().SetViewRange(shaderProgram,60.0f,800.0f,600.0f);
         //glEnable(GL_CULL_FACE);
         for(int i=1;i<=6;i++)
         {
@@ -48,16 +57,16 @@ namespace DrawSys
 
     void MapDrawer::doDraw()
     {               
-        glm::mat4 rotate = glm::mat4(1.0f);
-        rotate = glm::rotate(rotate, 1.0f*(float)glfwGetTime() , glm::vec3(1.0f, 1.0f, 0.0f));
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "rotate"), 1, GL_FALSE, glm::value_ptr(rotate));
+        // glm::mat4 rotate = glm::mat4(1.0f);
+        // rotate = glm::rotate(rotate, 1.0f*(float)glfwGetTime() , glm::vec3(1.0f, 1.0f, 0.0f));
+        // glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "rotate"), 1, GL_FALSE, glm::value_ptr(rotate));
 
-        glm::vec3 offset=glm::vec3(0.0f,0.0f,0.0f);
-        glUniform3fv(glGetUniformLocation(shaderProgram,"offset"),1,glm::value_ptr(offset));
+        // glm::vec3 offset=glm::vec3(0.0f,0.0f,0.0f);
+        // glUniform3fv(glGetUniformLocation(shaderProgram,"offset"),1,glm::value_ptr(offset));
         // float x=(float)sin(glfwGetTime())*1.0f;
         // float z=(float)cos(glfwGetTime())*1.0f;
-        camera.LookAt(shaderProgram,glm::vec3(0.0f,0.0f,0.0f));
-        camera.SetViewRange(shaderProgram,60.0f,800.0f,600.0f);
+        // camera.LookAt(shaderProgram,glm::vec3(0.0f,0.0f,0.0f));
+        // camera.SetViewRange(shaderProgram,60.0f,800.0f,600.0f);
         // DrawCube(glm::vec3(0.5f,0.5f,0.0f));
         // DrawCube(glm::vec3(-0.5f,-0.5f,0.0f));
         DrawCube(glm::vec3(0.0f,0.0f,0.0f));
@@ -155,14 +164,7 @@ namespace DrawSys
 
     //link shader programs
     void MapDrawer::CompileShaders() 
-    {
-        shaderProgram = glCreateProgram();
-        if (shaderProgram == 0)
-        {
-            fprintf(stderr, "Error creating shader program\n");
-            exit(1);
-        }  
-
+    {      
         string vShader, fShader;
         if (!ReadFile(vsPath, vShader)) 
         {
@@ -246,31 +248,10 @@ namespace DrawSys
        }
     }
     
-    void MapDrawer::Forward(float speed) 
+    void MapDrawer::UpdateView(float xoffset, float yoffset) 
     {
-        glm::vec3 pos=camera.GetCameraPos();
-        pos+=glm::vec3(0.0f,0.0f,speed);
-        camera.SetCameraPos(pos);
+        Camera::GetInstance().ChangeView(shaderProgram,xoffset,yoffset);
     }
     
-    void MapDrawer::Backward(float speed) 
-    {
-        glm::vec3 pos=camera.GetCameraPos();
-        pos+=glm::vec3(0.0f,0.0f,-speed);
-        camera.SetCameraPos(pos);
-    }
-    
-    void MapDrawer::Leftward(float speed) 
-    {
-        glm::vec3 pos=camera.GetCameraPos();
-        pos+=glm::vec3(speed,0.0f,0.0f);
-        camera.SetCameraPos(pos);
-    }
-    
-    void MapDrawer::Rightward(float speed) 
-    {
-        glm::vec3 pos=camera.GetCameraPos();
-        pos+=glm::vec3(-speed,0.0f,0.0f);
-        camera.SetCameraPos(pos);
-    }
+   
 } // namespace DrawSys

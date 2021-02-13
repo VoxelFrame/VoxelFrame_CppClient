@@ -6,7 +6,6 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include <Models/Datadef/data.h>
-#include"Camera.h"
 using namespace std;
 
 namespace DrawSys
@@ -16,9 +15,7 @@ namespace DrawSys
     private:
         const char* vsPath = "./resource/Shader/shader.vs";
         const char* fsPath = "./resource/Shader/shader.fs";
-        unsigned int VBO, VAO,EBO;
-        int shaderProgram;
-        Camera camera;
+        unsigned int VBO,VAO,EBO,shaderProgram;
         unsigned int textures[6];
         const float vertices[180] =
             {
@@ -83,10 +80,7 @@ namespace DrawSys
         void doDraw();
         void DrawCube(glm::vec3 offset);
         void DrawChunk(ChunkModel data,glm::vec3 pos);
-        void Forward(float speed);
-        void Backward(float speed);
-        void Leftward(float speed);
-        void Rightward(float speed);
+        void UpdateView(float xoffset, float yoffset);
     };
 
 } // namespace DrawSys
