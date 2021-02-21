@@ -13,19 +13,19 @@ namespace NetSys
             RecStats_ReceivedHead,
             RecStats_NoHead
         };
+        void bodyNotCompleteRec(uint32_t, uint16_t);
+        void bodyCompleteRec();
+        static RecStatRecorder *getInstance();
 
     private:
-        RecStats curState;
+        RecStats curState = RecStats_NoHead;
         /* data */
         uint32_t bodyLen;
         uint16_t msgId;
         RecStatRecorder(/* args */);
         ~RecStatRecorder();
 
-    public:
-        void bodyNotCompleteRec(uint32_t, uint16_t);
-        void bodyCompleteRec();
-        RecStatRecorder *getInstance();
+        // public:
     };
 
 }

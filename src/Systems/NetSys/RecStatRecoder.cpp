@@ -4,13 +4,14 @@ namespace NetSys
 
     RecStatRecorder::RecStatRecorder(/* args */)
     {
+
     }
 
     RecStatRecorder::~RecStatRecorder()
     {
     }
 
-    void RecStatRecorder::bodyNotCompleteRec(uint32_t, uint16_t)
+    void RecStatRecorder::bodyNotCompleteRec(uint32_t bodyLen, uint16_t msgId)
     {
     }
 

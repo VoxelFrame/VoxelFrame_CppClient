@@ -8,6 +8,8 @@
 #include "brynet/net/SocketLibFunction.hpp"
 #include "brynet/net/TcpConnection.hpp"
 
+#include "RecStatRecorder.h"
+
 using namespace std;
 using namespace brynet;
 using namespace brynet::net;
@@ -59,6 +61,8 @@ namespace NetSys
 
             //接收到数据后的回调
             dataSocket->setDataCallback([dataSocket](brynet::base::BasePacketReader &reader) {
+                auto recStateRecorder = RecStatRecorder::getInstance();
+
                 while (true)
                 {
                     //没有到一个包头的尺寸  包体长度四字节+数据类型二字节
@@ -68,10 +72,12 @@ namespace NetSys
                     }
                     auto buffer = reader.currentBuffer();
                     auto packetLen = reader.readUINT32(); //读取后位置也加1
-                    
+                    auto msgId = reader.readUINT16();
+
                     //没有到整个包体的尺寸
                     if (!reader.enough(packetLen - sizeof(uint32_t)))
                     {
+                        recStateRecorder->bodyNotCompleteRec(packetLen, msgId);
                         break;
                     }
 
@@ -90,6 +96,7 @@ namespace NetSys
                     reader.addPos(packetLen - sizeof(uint32_t) - sizeof(uint16_t) - sizeof(int64_t));
 
                     reader.savePos();
+                    recStateRecorder->bodyCompleteRec();
                 }
             });
             //断开链接的回调
