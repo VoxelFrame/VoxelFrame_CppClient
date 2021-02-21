@@ -23,46 +23,52 @@ namespace NetSys
     void netSysThread()
     {
         cout << "NetSys thread started" << endl;
-
+        //启动socket
         brynet::net::base::InitSocket();
-
+        //创建线程的智能指针
         auto clientEventLoop = std::make_shared<EventLoop>();
         std::string ip = "127.0.0.1";
         int port = 6666;
         int packetLen = 100;
+        //链接到对应ip和port
         auto fd = brynet::net::base::Connect(false, ip, port);
+        //socket设置发送尺寸和接收尺寸
         brynet::net::base::SocketSetSendSize(fd, 32 * 1024);
         brynet::net::base::SocketSetRecvSize(fd, 32 * 1024);
+        //设置无延迟操作（不太理解）
         brynet::net::base::SocketNodelay(fd);
 
+        //进入后的回调
         auto enterCallback = [packetLen](const TcpConnection::Ptr &dataSocket) {
             cout << "NetSys socket enterd" << endl;
 
-            static_assert(sizeof(dataSocket.get()) <= sizeof(int64_t), "ud's size must less int64");
+            // static_assert(sizeof(dataSocket.get()) <= sizeof(int64_t), "ud's size must less int64");
 
-            auto HEAD_LEN = sizeof(uint32_t) + sizeof(uint16_t);
+            // auto HEAD_LEN = sizeof(uint32_t) + sizeof(uint16_t);
 
-            std::shared_ptr<BigPacket> sp = std::make_shared<BigPacket>(false);
-            sp->writeUINT32(HEAD_LEN + sizeof(int64_t) + packetLen);
-            sp->writeUINT16(1);
-            sp->writeINT64((int64_t)dataSocket.get());
-            sp->writeBinary(std::string(packetLen, '_'));
+            // std::shared_ptr<BigPacket> sp = std::make_shared<BigPacket>(false);
+            // sp->writeUINT32(HEAD_LEN + sizeof(int64_t) + packetLen);
+            // sp->writeUINT16(1);
+            // sp->writeINT64((int64_t)dataSocket.get());
+            // sp->writeBinary(std::string(packetLen, '_'));
 
-            for (int i = 0; i < 1; ++i)
-            {
-                dataSocket->send(sp->getData(), sp->getPos());
-            }
+            // for (int i = 0; i < 1; ++i)
+            // {
+            //     dataSocket->send(sp->getData(), sp->getPos());
+            // }
 
+            //接收到数据后的回调
             dataSocket->setDataCallback([dataSocket](brynet::base::BasePacketReader &reader) {
                 while (true)
                 {
-                    if (!reader.enough(sizeof(uint32_t)))
+                    //没有到一个包头的尺寸  包体长度四字节+数据类型二字节
+                    if (!reader.enough(6))
                     {
                         break;
                     }
-
                     auto buffer = reader.currentBuffer();
                     auto packetLen = reader.readUINT32();
+                    //没有到整个包体的尺寸
                     if (!reader.enough(packetLen - sizeof(uint32_t)))
                     {
                         break;
@@ -71,19 +77,19 @@ namespace NetSys
                     // TotalRecvSize += packetLen;
                     // TotalRecvPacketNum++;
 
-                    reader.readUINT16();
-                    int64_t addr = reader.readINT64();
+                    // reader.readUINT16();
+                    // int64_t addr = reader.readINT64();
 
-                    if (addr == (int64_t)(dataSocket.get()))
-                    {
-                        dataSocket->send(buffer, packetLen);
-                    }
+                    // if (addr == (int64_t)(dataSocket.get()))
+                    // {
+                    //     dataSocket->send(buffer, packetLen);
+                    // }
 
                     reader.addPos(packetLen - sizeof(uint32_t) - sizeof(uint16_t) - sizeof(int64_t));
                     reader.savePos();
                 }
             });
-
+            //断开链接的回调
             dataSocket->setDisConnectCallback([](const TcpConnection::Ptr &dataSocket) {
                 (void)dataSocket;
                 cout << "NetSys disconnected" << endl;
