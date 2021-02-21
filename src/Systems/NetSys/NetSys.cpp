@@ -67,7 +67,8 @@ namespace NetSys
                         break;
                     }
                     auto buffer = reader.currentBuffer();
-                    auto packetLen = reader.readUINT32();
+                    auto packetLen = reader.readUINT32(); //读取后位置也加1
+                    
                     //没有到整个包体的尺寸
                     if (!reader.enough(packetLen - sizeof(uint32_t)))
                     {
@@ -85,7 +86,9 @@ namespace NetSys
                     //     dataSocket->send(buffer, packetLen);
                     // }
 
+                    //添加读取整个包的变化，
                     reader.addPos(packetLen - sizeof(uint32_t) - sizeof(uint16_t) - sizeof(int64_t));
+
                     reader.savePos();
                 }
             });
