@@ -62,11 +62,15 @@ namespace NetSys
             //接收到数据后的回调
             dataSocket->setDataCallback([dataSocket](brynet::base::BasePacketReader &reader) {
                 auto recStateRecorder = RecStatRecorder::getInstance();
-                auto bodyLen = recStateRecorder->getBodyLen();
-                auto msgId = recStateRecorder->getMsgId();
+                uint32_t bodyLen; //= recStateRecorder->getBodyLen();
+                uint16_t msgId;   // = recStateRecorder->getMsgId();
+                //检查之前是否有未接收完成的情况，如果有就继续之前的接收
                 if (recStateRecorder->getCurState() == RecStatRecorder::RecStats_ReceivedHead)
                 {
-                                }
+                    bodyLen = recStateRecorder->getBodyLen();
+                    msgId = recStateRecorder->getMsgId();
+                    goto checkBodyComplete;
+                }
                 while (true)
                 {
                     //没有到一个包头的尺寸  包体长度四字节+数据类型二字节
@@ -78,6 +82,7 @@ namespace NetSys
                     bodyLen = reader.readUINT32(); //读取后位置也加1
                     msgId = reader.readUINT16();
 
+                checkBodyComplete:
                     //没有到整个包体的尺寸
                     if (!reader.enough(bodyLen))
                     {
@@ -102,7 +107,6 @@ namespace NetSys
                     reader.savePos();
                     recStateRecorder->bodyCompleteRec();
                 }
-            end:
             });
             //断开链接的回调
             dataSocket->setDisConnectCallback([](const TcpConnection::Ptr &dataSocket) {
