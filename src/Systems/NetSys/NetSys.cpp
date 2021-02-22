@@ -31,7 +31,7 @@ namespace NetSys
         auto clientEventLoop = std::make_shared<EventLoop>();
         std::string ip = "127.0.0.1";
         int port = 6666;
-        int packetLen = 100;
+        // int packetLen = 100;
         //链接到对应ip和port
         auto fd = brynet::net::base::Connect(false, ip, port);
         //socket设置发送尺寸和接收尺寸
@@ -41,7 +41,7 @@ namespace NetSys
         brynet::net::base::SocketNodelay(fd);
 
         //进入后的回调
-        auto enterCallback = [packetLen](const TcpConnection::Ptr &dataSocket) {
+        auto enterCallback = [](const TcpConnection::Ptr &dataSocket) {
             cout << "NetSys socket enterd" << endl;
 
             // static_assert(sizeof(dataSocket.get()) <= sizeof(int64_t), "ud's size must less int64");
@@ -62,7 +62,11 @@ namespace NetSys
             //接收到数据后的回调
             dataSocket->setDataCallback([dataSocket](brynet::base::BasePacketReader &reader) {
                 auto recStateRecorder = RecStatRecorder::getInstance();
-
+                auto bodyLen = recStateRecorder->getBodyLen();
+                auto msgId = recStateRecorder->getMsgId();
+                if (recStateRecorder->getCurState() == RecStatRecorder::RecStats_ReceivedHead)
+                {
+                                }
                 while (true)
                 {
                     //没有到一个包头的尺寸  包体长度四字节+数据类型二字节
@@ -71,13 +75,13 @@ namespace NetSys
                         break;
                     }
                     auto buffer = reader.currentBuffer();
-                    auto packetLen = reader.readUINT32(); //读取后位置也加1
-                    auto msgId = reader.readUINT16();
+                    bodyLen = reader.readUINT32(); //读取后位置也加1
+                    msgId = reader.readUINT16();
 
                     //没有到整个包体的尺寸
-                    if (!reader.enough(packetLen - sizeof(uint32_t)))
+                    if (!reader.enough(bodyLen))
                     {
-                        recStateRecorder->bodyNotCompleteRec(packetLen, msgId);
+                        recStateRecorder->bodyNotCompleteRec(bodyLen, msgId);
                         break;
                     }
 
@@ -93,11 +97,12 @@ namespace NetSys
                     // }
 
                     //添加读取整个包的变化，
-                    reader.addPos(packetLen - sizeof(uint32_t) - sizeof(uint16_t) - sizeof(int64_t));
+                    reader.addPos(bodyLen);
 
                     reader.savePos();
                     recStateRecorder->bodyCompleteRec();
                 }
+            end:
             });
             //断开链接的回调
             dataSocket->setDisConnectCallback([](const TcpConnection::Ptr &dataSocket) {
