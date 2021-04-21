@@ -10,7 +10,7 @@
                 "${workspaceFolder}/third/brynet/include",
                 "${workspaceFolder}/third/protobuff/src",
                 "${workspaceFolder}/third/vf_imgui/imgui",
-                "${workspaceFolder}/third/stb_image/include",
+                "${workspaceFolder}/third/stb_image/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -22,7 +22,8 @@
             "cStandard": "c11",
             "cppStandard": "c++11",
             "intelliSenseMode": "msvc-x64",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4

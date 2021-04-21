@@ -1,5 +1,6 @@
 # cmake最低版本号要求
 cmake_minimum_required (VERSION 2.8)
+# cmake_minimum_required(VERSION 3.20)
 
 set(PROJECT_NAME VoxelFrame)
 
@@ -7,10 +8,16 @@ project (${PROJECT_NAME})
 
 set (CMAKE_CXX_STAND 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g")
+
+IF (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+        "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+ENDIF()
+
 #--------------------------------------------------------------------
 # Set compiler specific flags
 #--------------------------------------------------------------------
-# if (MSVC)
+if (MSVC)
 #     if (NOT USE_MSVC_RUNTIME_LIBRARY_DLL)
         foreach (flag CMAKE_C_FLAGS
                       CMAKE_C_FLAGS_DEBUG
@@ -27,7 +34,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g")
 
         endforeach()
 #     endif()
-# endif()
+endif()
 # set ( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" )
 # set ( CMAKE_C_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" )
 # set ( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELEASE} /MTd" )
@@ -153,23 +160,26 @@ add_executable (${PROJECT_NAME} ${SRC_FILES})
 
 #         endforeach()
 if(MSVC)
-    message(${CMAKE_BUILD_TYPE})
+    
     set (protolib_dir ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/)
+    message("protolib_dir" ${protolib_dir})
     IF (CMAKE_BUILD_TYPE MATCHES "Debug")
+        message("Debug")
         set_target_properties( ${PROJECT_NAME} PROPERTIES
             COMPILE_FLAGS "/MTd"
         )
         
-        set (protolib ${protolib_dir}libprotobufd.lib ${protolib_dir}libprotobuf-lited.lib ${protolib_dir}libprotocd.lib)
+        set (protolib ${protolib_dir}Debug/libprotobufd.lib ${protolib_dir}Debug/libprotobuf-lited.lib ${protolib_dir}Debug/libprotocd.lib)
     ELSE()
+        message("Release")
         set_target_properties( ${PROJECT_NAME} PROPERTIES
             COMPILE_FLAGS "/MT"
         )
-        set (protolib ${protolib_dir}libprotobuf.lib ${protolib_dir}libprotobuf-lite.lib ${protolib_dir}libprotoc.lib)
+        set (protolib ${protolib_dir}Release/libprotobuf.lib ${protolib_dir}Release/libprotobuf-lite.lib ${protolib_dir}Release/libprotoc.lib)
     ENDIF()
     
 endif()
-message(${protolib})
+# message(${protolib})
 # 设置工作目录
 # set_property(TARGET ${PROJECT_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY 
 #     ${CMAKE_SOURCE_DIR}/resources

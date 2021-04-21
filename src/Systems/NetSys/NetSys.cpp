@@ -61,7 +61,7 @@ namespace NetSys
 
             //接收到数据后的回调
             dataSocket->setDataCallback([dataSocket](brynet::base::BasePacketReader &reader) {
-                cout << "NetSys data in" << endl;
+                // cout << "NetSys data in" << endl;
                 auto recStateRecorder = RecStatRecorder::getInstance();
                 uint32_t bodyLen; //= recStateRecorder->getBodyLen();
                 uint16_t msgId;   // = recStateRecorder->getMsgId();
@@ -90,7 +90,7 @@ namespace NetSys
                         recStateRecorder->bodyNotCompleteRec(bodyLen, msgId);
                         break;
                     }
-
+                    cout << "one pack" << endl;
                     // TotalRecvSize += packetLen;
                     // TotalRecvPacketNum++;
 

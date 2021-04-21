@@ -96,5 +96,6 @@
             ]
         },
     ],
-    "cmake.generator": "MinGW Makefiles",
+    // "cmake.generator": "MinGW Makefiles",
+    "cmake.generator": "Visual Studio 15",
 }
