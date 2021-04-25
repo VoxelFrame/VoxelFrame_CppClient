@@ -31,7 +31,8 @@ jobs:
         # 来源仓库
         source-repo: "git@github.com:VoxelFrame/VoxelFrame_CppClient.git"
         # 目标仓库https://github.com/VoxelFrame/VoxelFrame_CppClient.git
-        destination-repo: "git@gitee.com:VoxelFrame/VoxelFrame_CppClient.git"
+#        https://gitee.com/voxel-frame/VoxelFrame_CppClient.git
+        destination-repo: "git@gitee.com:voxel-frame/VoxelFrame_CppClient.git"
 #   reload-pages:
 #     needs: sync
 #     runs-on: ubuntu-latest
