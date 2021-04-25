@@ -20,7 +20,7 @@ jobs:
 #         # 构建结果存储目录
 #         BUILD_DIR: docs/.vuepress/dist/
   sync:
-    needs: build-and-deploy
+#     needs: build-and-deploy
     runs-on: ubuntu-latest
     steps:
     - name: Sync to Gitee
