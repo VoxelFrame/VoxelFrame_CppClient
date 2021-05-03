@@ -97,5 +97,10 @@
         },
     ],
     // "cmake.generator": "MinGW Makefiles",
+    // Visual Studio 15   vs2017 x86
+    // Visual Studio 15 Win64   vs2017 x64
+    // Visual Studio 16   vs2019 x86
+    // Visual Studio 16 Win64   vs2019 x64
     "cmake.generator": "Visual Studio 15 Win64",
+    "cmake.parallelJobs": 30
 }

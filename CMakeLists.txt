@@ -12,6 +12,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g")
 
 
 set (3RD_DIR ${PROJECT_SOURCE_DIR}/third)
+# message(${3RD_DIR})
 set(CMAKE_MODULE_PATH ${3RD_DIR})
 
 # glfw
@@ -46,14 +47,14 @@ include_directories (${BRYNET_DIR}/include)
 
 # protobuf
 set (PROTO_DIR ${3RD_DIR}/protobuff)
-add_subdirectory(${PROTO_DIR}/cmake)
+# add_subdirectory(${PROTO_DIR}/cmake)
 include_directories (${PROTO_DIR}/src)
 
 # file(GLOB protobuf_libs
 #         ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/*.lib
 #         )
 
-set (PROTOBUF_PROTOC_EXECUTABLE ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/protoc.exe)
+set (PROTOBUF_PROTOC_EXECUTABLE ${PROTO_DIR}/protobuf_cmake/build/Release/protoc.exe)
 set (PROTO_FILES_DIR ${PROJECT_SOURCE_DIR}/src/impl/Protos)
 file(GLOB protobuf_files
         ${PROTO_FILES_DIR}/*.proto
@@ -103,13 +104,13 @@ add_executable (${PROJECT_NAME} ${SRC_FILES})
 
 if(MSVC)
     
-    set (protolib_dir ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/)
+    set (protolib_dir ${PROTO_DIR}/protobuf_cmake/build/)
     
         set_target_properties( ${PROJECT_NAME} PROPERTIES
             COMPILE_FLAGS "/MT"
         )
         
-        set (protolibsd ${protolib_dir}Debug/libprotobufd.lib ${protolib_dir}Debug/libprotobuf-lited.lib ${protolib_dir}Debug/libprotocd.lib)
+        # set (protolibsd ${protolib_dir}Debug/libprotobufd.lib ${protolib_dir}Debug/libprotobuf-lited.lib ${protolib_dir}Debug/libprotocd.lib)
     
         set (protolibs ${protolib_dir}Release/libprotobuf.lib ${protolib_dir}Release/libprotobuf-lite.lib ${protolib_dir}Release/libprotoc.lib)
     

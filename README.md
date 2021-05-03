@@ -32,7 +32,7 @@ vscode
 
 #### 安装一些必要的插件
 
-![image-20210205004832320](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004832.png)![image-20210205004850848](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004850.png)![image-20210205004947972](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004948.png)![image-20210205004918480](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205004918.png)        ![image-20210205154117520](https://gitee.com/zhongyichen33/testtupian/raw/master/20210205154117.png)
+​        
 
 ## 使用了的库
 
