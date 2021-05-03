@@ -13,5 +13,6 @@ public:
     float fps;
     int Width;
     int Height;
+    float highDPIscaleFactor = 1;
 };
 #endif // __WINDOWINFOMODEL_H__

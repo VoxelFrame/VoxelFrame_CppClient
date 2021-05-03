@@ -15,6 +15,7 @@
 	],
 	"settings": {
 		"files.associations": {
+			"*.json": "jsonc",
 			"array": "cpp",
 			"atomic": "cpp",
 			"*.tcc": "cpp",
@@ -99,7 +100,8 @@
 			"*.inc": "cpp",
 			"compare": "cpp",
 			"forward_list": "cpp",
-			"stack": "cpp"
+			"stack": "cpp",
+			"*.rh": "cpp"
 		}
 	}
 }

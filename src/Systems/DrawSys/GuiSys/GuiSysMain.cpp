@@ -9,7 +9,7 @@ namespace DrawSys
         ImFont *font_karla;   // = io.Fonts -> AddFontFromFileTTF("resource/font/Karla-Regular.ttf", 18.0f);
         ImFont *font_latol;   // = io void init()
         ImVec4 clear_color;   // = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-        bool isRender=false;
+        bool isRender = false;
         void init()
         {
             WindowInfoModel &wim = WindowInfoModel::getInstance();
@@ -28,7 +28,8 @@ namespace DrawSys
             //ImGui::StyleColorsDark();
             //ImGui::StyleColorsClassic();
             ImGui::StyleColorsLight();
-
+            ImGuiStyle &style = ImGui::GetStyle();
+            style.ScaleAllSizes(wim.highDPIscaleFactor);
             // Load Fonts
             // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
             // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
@@ -39,17 +40,26 @@ namespace DrawSys
             //io.Fonts->AddFontDefault();
             //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
             //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-
-            font_default = io.Fonts->AddFontDefault();
-            font_cousine = io.Fonts->AddFontFromFileTTF("resource/font/Cousine-Regular.ttf", 15.0f);
-            font_karla = io.Fonts->AddFontFromFileTTF("resource/font/Karla-Regular.ttf", 18.0f);
-            font_latol = io.Fonts->AddFontFromFileTTF("resource/font/Lato-Regular.ttf", 18.0f);
+            ImFontConfig config;
+            config.SizePixels = 18.0f * wim.highDPIscaleFactor;
+            font_default = io.Fonts->AddFontDefault(&config);
+            font_cousine = io.Fonts->AddFontFromFileTTF("resource/font/Cousine-Regular.ttf", 15.0f * wim.highDPIscaleFactor);
+            font_karla = io.Fonts->AddFontFromFileTTF("resource/font/Karla-Regular.ttf", 18.0f * wim.highDPIscaleFactor);
+            font_latol = io.Fonts->AddFontFromFileTTF("resource/font/Lato-Regular.ttf", 18.0f * wim.highDPIscaleFactor);
 
             // io.Fonts->AddFontFromFileTTF("resource/font/DroidSans.ttf", 16.0f);
             // io.Fonts->AddFontFromFileTTF("resource/font/ProggyTiny.ttf", 10.0f);
             // ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
             // IM_ASSERT(font != NULL);
             clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+            // if (view)
+            // {
+            //     const float dpi = (float)[view.window backingScaleFactor];
+            //     io.DisplaySize = ImVec2((float)view.bounds.size.width, (float)view.bounds.size.height);
+            //     io.DisplayFramebufferScale = ImVec2(dpi, dpi);
+            // }
+            // float dpi = io.dpiMainViewport->DpiScale;
+            // io.DisplaySize = ImVec2((float)w / dpi, (float)h / dpi);
         }
         void renderGui()
         {
@@ -80,7 +90,7 @@ namespace DrawSys
             // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called "Debug".
             {
                 static float f = 0.0f;
-                static int counter = 0;  
+                static int counter = 0;
                 ImGui::Text("Hello, world!");                            // Display some text (you can use a format string too)
                 ImGui::SliderFloat("float", &f, 0.0f, 1.0f);             // Edit 1 float using a slider from 0.0f to 1.0f
                 ImGui::ColorEdit3("clear color", (float *)&clear_color); // Edit 3 floats representing a color
@@ -108,8 +118,8 @@ namespace DrawSys
 
                 if (ImGui::Button("Button")) // Buttons return true when clicked (NB: most widgets return true when edited/activated)
                     counter++;
-                if(ImGui::Button("Render"))
-                    isRender=!isRender;
+                if (ImGui::Button("Render"))
+                    isRender = !isRender;
                 ImGui::SameLine();
                 ImGui::Text("counter = %d", counter);
 

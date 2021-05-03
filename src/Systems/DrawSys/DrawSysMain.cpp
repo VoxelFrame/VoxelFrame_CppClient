@@ -9,15 +9,15 @@
 #include "./MapDrawer/Camera.h"
 namespace DrawSys
 {
-    float deltatime=0.0f;
-    float lastframe=0.0f;
+    float deltatime = 0.0f;
+    float lastframe = 0.0f;
     float lastX = 400, lastY = 300;
     float sensitivity = 0.05f;
     void drawBegin();
     void drawMain();
     void drawEnd();
-    void processInput(GLFWwindow *window,int key, int scancode, int action, int mode);
-    void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+    void processInput(GLFWwindow *window, int key, int scancode, int action, int mode);
+    void mouse_callback(GLFWwindow *window, double xpos, double ypos);
     void doDraw()
     {
         drawBegin();
@@ -42,6 +42,21 @@ namespace DrawSys
         //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
+        // float highDPIscaleFactor = 1.0;
+        // #ifdef _WIN32
+        // if it's a HighDPI monitor, try to scale everything
+        GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+        float xscale, yscale;
+        glfwGetMonitorContentScale(monitor, &xscale, &yscale);
+        if (xscale > 1 || yscale > 1)
+        {
+            windowInfoModel.highDPIscaleFactor = xscale;
+            glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+        }
+        else
+        {
+            windowInfoModel.highDPIscaleFactor = 1;
+        }
 
         //创建窗口
         GLFWwindow *window = glfwCreateWindow(
@@ -78,9 +93,9 @@ namespace DrawSys
 
     inline void drawBegin()
     {
-        float currenttime=(float)glfwGetTime();
-        deltatime=currenttime-lastframe;
-        lastframe=currenttime;
+        float currenttime = (float)glfwGetTime();
+        deltatime = currenttime - lastframe;
+        lastframe = currenttime;
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
@@ -102,34 +117,34 @@ namespace DrawSys
         glfwSwapBuffers(windowInfoModel.window);
         //检查有没有触发什么事件（键盘输入、鼠标移动等)、窗口改变
         glfwPollEvents();
-        glfwSetKeyCallback(windowInfoModel.window,processInput);
+        glfwSetKeyCallback(windowInfoModel.window, processInput);
         glfwSetCursorPosCallback(windowInfoModel.window, mouse_callback);
     }
 
-    void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+    void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     {
-        float xoffset =(float) (xpos - lastX);
-        float yoffset =(float)(lastY - ypos); 
+        float xoffset = (float)(xpos - lastX);
+        float yoffset = (float)(lastY - ypos);
         lastX = (float)xpos;
-        lastY = (float)ypos;    
+        lastY = (float)ypos;
         xoffset *= sensitivity;
         yoffset *= sensitivity;
-        MapDrawer::getInstance()->UpdateView(xoffset,yoffset);
+        MapDrawer::getInstance()->UpdateView(xoffset, yoffset);
     }
 
-     void processInput(GLFWwindow *window,int key, int scancode, int action, int mode)
-     {
-    //     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    //         glfwSetWindowShouldClose(window, true);
-    //     if(glfwGetKey(window,GLFW_KEY_W)==GLFW_PRESS)
-    //         MapDrawer::getInstance()->Forward(deltatime*20.0f);
-    //     if(glfwGetKey(window,GLFW_KEY_A)==GLFW_PRESS)
-    //         MapDrawer::getInstance()->Leftward(deltatime*20.0f);
-    //     if(glfwGetKey(window,GLFW_KEY_S)==GLFW_PRESS)
-    //         MapDrawer::getInstance()->Backward(deltatime*20.0f);
-    //     if(glfwGetKey(window,GLFW_KEY_D)==GLFW_PRESS)
-    //         MapDrawer::getInstance()->Rightward(deltatime*20.0f);
-           if(glfwGetKey(window,GLFW_KEY_Q)==GLFW_PRESS)
-            MapDrawer::getInstance()->UpdateView(0.01f,0.01f);
-     }
+    void processInput(GLFWwindow *window, int key, int scancode, int action, int mode)
+    {
+        //     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        //         glfwSetWindowShouldClose(window, true);
+        //     if(glfwGetKey(window,GLFW_KEY_W)==GLFW_PRESS)
+        //         MapDrawer::getInstance()->Forward(deltatime*20.0f);
+        //     if(glfwGetKey(window,GLFW_KEY_A)==GLFW_PRESS)
+        //         MapDrawer::getInstance()->Leftward(deltatime*20.0f);
+        //     if(glfwGetKey(window,GLFW_KEY_S)==GLFW_PRESS)
+        //         MapDrawer::getInstance()->Backward(deltatime*20.0f);
+        //     if(glfwGetKey(window,GLFW_KEY_D)==GLFW_PRESS)
+        //         MapDrawer::getInstance()->Rightward(deltatime*20.0f);
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+            MapDrawer::getInstance()->UpdateView(0.01f, 0.01f);
+    }
 } // namespace DrawSys
