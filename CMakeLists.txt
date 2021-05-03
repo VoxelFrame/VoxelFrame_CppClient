@@ -9,53 +9,10 @@ project (${PROJECT_NAME})
 set (CMAKE_CXX_STAND 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g")
 
-IF (NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING
-        "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
-ENDIF()
-
-#--------------------------------------------------------------------
-# Set compiler specific flags
-#--------------------------------------------------------------------
-if (MSVC)
-#     if (NOT USE_MSVC_RUNTIME_LIBRARY_DLL)
-        foreach (flag CMAKE_C_FLAGS
-                      CMAKE_C_FLAGS_DEBUG
-                      CMAKE_C_FLAGS_RELEASE
-                      CMAKE_C_FLAGS_MINSIZEREL
-                      CMAKE_C_FLAGS_RELWITHDEBINFO)
-
-            if (${flag} MATCHES "/MD")
-                string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
-            endif()
-            if (${flag} MATCHES "/MDd")
-                string(REGEX REPLACE "/MDd" "/MTd" ${flag} "${${flag}}")
-            endif()
-
-        endforeach()
-#     endif()
-endif()
-# set ( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" )
-# set ( CMAKE_C_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT" )
-# set ( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELEASE} /MTd" )
-# set ( CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELEASE} /MTd" )
-# set (CMAKE_SHARED_LINKER_FLAGS_RELEASE "/INCREMENTAL:YES")
-# 配置一个头文件来传递一个cmake设置到源代码
-# configure_file (
-#     "${PROJECT_SOURCE_DIR}/${PROJECT_NAME}Config.h.in"
-#     "${PROJECT_SOURCE_DIR}/${PROJECT_NAME}Config.h"
-# )
-
-#预先宏
-# add_definitions("-DCPP_SRC_DIR=\"${PROJECT_SOURCE_DIR}/\"")
 
 
 set (3RD_DIR ${PROJECT_SOURCE_DIR}/third)
 set(CMAKE_MODULE_PATH ${3RD_DIR})
-
-# # IrrKlang
-# find_package (IrrKlang REQUIRED)
-# include_directories (${IRRKLANG_INCLUDE_DIR})
 
 # glfw
 set (GLFW_DIR ${3RD_DIR}/glfw)
@@ -144,40 +101,23 @@ include_directories (${SRC_DIR})
 file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp ${SRC_DIR}/*.cc)
 add_executable (${PROJECT_NAME} ${SRC_FILES})
 
-# foreach (flag CMAKE_C_FLAGS
-#                       CMAKE_C_FLAGS_DEBUG
-#                       CMAKE_C_FLAGS_RELEASE
-#                       CMAKE_C_FLAGS_MINSIZEREL
-#                       CMAKE_C_FLAGS_RELWITHDEBINFO
-#                       COMPILE_FLAGS)
-#             message(${flag})
-#             if (${flag} MATCHES "/MD")
-#                 string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
-#             endif()
-#             if (${flag} MATCHES "/MDd")
-#                 string(REGEX REPLACE "/MDd" "/MTd" ${flag} "${${flag}}")
-#             endif()
-
-#         endforeach()
 if(MSVC)
     
     set (protolib_dir ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/)
-    message("protolib_dir" ${protolib_dir})
-    IF (CMAKE_BUILD_TYPE MATCHES "Debug")
-        message("Debug")
-        set_target_properties( ${PROJECT_NAME} PROPERTIES
-            COMPILE_FLAGS "/MTd"
-        )
-        
-        set (protolib ${protolib_dir}Debug/libprotobufd.lib ${protolib_dir}Debug/libprotobuf-lited.lib ${protolib_dir}Debug/libprotocd.lib)
-    ELSE()
-        message("Release")
+    
         set_target_properties( ${PROJECT_NAME} PROPERTIES
             COMPILE_FLAGS "/MT"
         )
-        set (protolib ${protolib_dir}Release/libprotobuf.lib ${protolib_dir}Release/libprotobuf-lite.lib ${protolib_dir}Release/libprotoc.lib)
-    ENDIF()
+        
+        set (protolibsd ${protolib_dir}Debug/libprotobufd.lib ${protolib_dir}Debug/libprotobuf-lited.lib ${protolib_dir}Debug/libprotocd.lib)
     
+        set (protolibs ${protolib_dir}Release/libprotobuf.lib ${protolib_dir}Release/libprotobuf-lite.lib ${protolib_dir}Release/libprotoc.lib)
+    
+    target_link_libraries (${PROJECT_NAME} 
+        general glfw glad imgui ws2_32 ${protolibs} 
+        # debug ${protolibsd}
+        # optimized ${protolibs}
+    )
 endif()
 # message(${protolib})
 # 设置工作目录
@@ -186,7 +126,7 @@ endif()
 # )
 
 # 添加链接库
-target_link_libraries (${PROJECT_NAME} glfw glad imgui ws2_32 ${protolib})
+
 
 
 # target_compile_definitions(${PROJECT_NAME} PRIVATE GLFW_INCLUDE_NONE)
