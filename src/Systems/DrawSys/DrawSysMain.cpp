@@ -111,6 +111,7 @@ namespace DrawSys
         // {
         // MapDrawer::getInstance()->doDraw();
         // }
+
         GuiSys::renderGui();
         GuiSys::drawGui(); //绘制gui，最后一步做
     }
