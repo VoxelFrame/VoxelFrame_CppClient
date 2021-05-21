@@ -11,7 +11,8 @@
                 "${workspaceFolder}/third/protobuff/src",
                 "${workspaceFolder}/third/vf_imgui/imgui",
                 "${workspaceFolder}/third/stb_image/include",
-                "${workspaceFolder}/third/sparsepp",
+                // "${workspaceFolder}/third/sparsepp",
+                "${workspaceFolder}/third/parallel-hashmap",
             ],
             "defines": [
                 "_DEBUG",

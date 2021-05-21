@@ -1,5 +1,5 @@
 # cmake最低版本号要求
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.0)
 # cmake_minimum_required(VERSION 3.20)
 
 set(PROJECT_NAME VoxelFrame)
@@ -45,9 +45,12 @@ set (BRYNET_DIR ${3RD_DIR}/brynet)
 add_subdirectory(${BRYNET_DIR}) 
 include_directories (${BRYNET_DIR}/include)
 
-# sparsepp
-set (sparsepp_dir ${3RD_DIR}/sparsepp)
-include_directories (${sparsepp_dir})
+# parallel_hashmap
+set (parallel_hashmap_dir ${3RD_DIR})
+include_directories (${parallel_hashmap_dir})
+# # sparsepp
+# set (sparsepp_dir ${3RD_DIR}/sparsepp)
+# include_directories (${sparsepp_dir})
 
 # protobuf
 set (PROTO_DIR ${3RD_DIR}/protobuff)
