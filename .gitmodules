@@ -11,3 +11,6 @@
 [submodule "third/protobuff"]
 	path = third/protobuff
 	url = https://github.com/VoxelFrame/protobuff.git
+[submodule "third/sparsepp"]
+	path = third/sparsepp
+	url = https://github.com/VoxelFrame/sparsepp.git

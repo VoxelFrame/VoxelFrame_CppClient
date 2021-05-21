@@ -18,12 +18,6 @@ namespace DrawSys
     void drawEnd();
     void processInput(GLFWwindow *window, int key, int scancode, int action, int mode);
     void mouse_callback(GLFWwindow *window, double xpos, double ypos);
-    void doDraw()
-    {
-        drawBegin();
-        drawMain();
-        drawEnd();
-    }
 
     //窗口大小变化时，重新设置视口
     void framebuff_size_callback(GLFWwindow *window, int width, int height)
@@ -83,12 +77,20 @@ namespace DrawSys
         //设置视口Viewport
         //前两个参数控制渲染窗口左下角的相对位置，第三和第四个参数控制渲染窗口的宽度和高度
         //OpenGL会在此窗口大小范围内进行坐标变换
-        glViewport(0, 0, 800, 600);
+        glViewport(0, 0, 1080, 960);
         //监听窗口大小变化
         glfwSetFramebufferSizeCallback(window, framebuff_size_callback);
 
         GuiSys::init();
         return true;
+    }
+
+    // 绘制相关 /////////////////////////////////////////////////////////
+    void doDraw()
+    {
+        drawBegin();
+        drawMain();
+        drawEnd();
     }
 
     inline void drawBegin()
@@ -98,14 +100,17 @@ namespace DrawSys
         lastframe = currenttime;
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // 开启面剔除
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_FRONT);
     }
 
     inline void drawMain()
     {
-        if (GuiSys::isRender)
-        {
-            MapDrawer::getInstance()->doDraw();
-        }
+        // if (GuiSys::isRender)
+        // {
+        // MapDrawer::getInstance()->doDraw();
+        // }
         GuiSys::renderGui();
         GuiSys::drawGui(); //绘制gui，最后一步做
     }
@@ -120,6 +125,7 @@ namespace DrawSys
         glfwSetKeyCallback(windowInfoModel.window, processInput);
         glfwSetCursorPosCallback(windowInfoModel.window, mouse_callback);
     }
+    //////////////////////////////////////////////////////////////////////////////////////////////////
 
     void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     {
