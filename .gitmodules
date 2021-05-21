@@ -14,3 +14,6 @@
 [submodule "third/sparsepp"]
 	path = third/sparsepp
 	url = https://github.com/VoxelFrame/sparsepp.git
+[submodule "third/parallel-hashmap"]
+	path = third/parallel-hashmap
+	url = https://github.com/VoxelFrame/parallel-hashmap.git

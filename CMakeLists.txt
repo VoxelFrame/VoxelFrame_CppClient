@@ -45,10 +45,15 @@ set (BRYNET_DIR ${3RD_DIR}/brynet)
 add_subdirectory(${BRYNET_DIR}) 
 include_directories (${BRYNET_DIR}/include)
 
+# sparsepp
+set (sparsepp_dir ${3RD_DIR}/sparsepp)
+include_directories (${sparsepp_dir})
+
 # protobuf
 set (PROTO_DIR ${3RD_DIR}/protobuff)
 # add_subdirectory(${PROTO_DIR}/cmake)
 include_directories (${PROTO_DIR}/src)
+
 
 # file(GLOB protobuf_libs
 #         ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/*.lib

@@ -10,7 +10,8 @@
                 "${workspaceFolder}/third/brynet/include",
                 "${workspaceFolder}/third/protobuff/src",
                 "${workspaceFolder}/third/vf_imgui/imgui",
-                "${workspaceFolder}/third/stb_image/include"
+                "${workspaceFolder}/third/stb_image/include",
+                "${workspaceFolder}/third/sparsepp",
             ],
             "defines": [
                 "_DEBUG",
