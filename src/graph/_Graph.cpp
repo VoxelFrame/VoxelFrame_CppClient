@@ -3,8 +3,10 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include <iostream>
+#include "io/Input.h"
+#include "./gui/_gui.h"
 // #include "Models/WindowInfoModel.h"
-Graph _Graph;
+Graph _g_Graph;
 
 float deltatime = 0.0f;
 float lastframe = 0.0f;
@@ -16,17 +18,6 @@ void drawMain();
 void drawEnd();
 void processInput(GLFWwindow *window, int key, int scancode, int action, int mode);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
-
-//窗口大小变化时，重新设置视口
-void framebuff_size_callback(GLFWwindow *window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-    // WindowInfoModel &wim = WindowInfoModel::getInstance();
-    // wim.Height = height;
-    // wim.Width = width;
-    _Graph.windowH = height;
-    _Graph.windowW = width;
-}
 
 bool Graph::init()
 {
@@ -46,12 +37,12 @@ bool Graph::init()
     glfwGetMonitorContentScale(monitor, &xscale, &yscale);
     if (xscale > 1 || yscale > 1)
     {
-        _Graph.highDPIscaleFactor = xscale;
+        this->highDPIscaleFactor = xscale;
         glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
     }
     else
     {
-        _Graph.highDPIscaleFactor = 1;
+        this->highDPIscaleFactor = 1;
     }
     ////////////////////////////////////////////////////////////////
 
@@ -82,9 +73,8 @@ bool Graph::init()
     //OpenGL会在此窗口大小范围内进行坐标变换
     glViewport(0, 0, 1080, 960);
     //监听窗口大小变化
-    glfwSetFramebufferSizeCallback(window, framebuff_size_callback);
 
-    GuiSys::init();
+    _Gui.init();
     return true;
 }
 
@@ -115,44 +105,44 @@ inline void drawMain()
     // MapDrawer::getInstance()->doDraw();
     // }
 
-    GuiSys::renderGui();
-    GuiSys::drawGui(); //绘制gui，最后一步做
+    _Gui.renderGui();
+    _Gui.drawGui(); //绘制gui，最后一步做
 }
 
 inline void drawEnd()
 {
     //将存储在缓冲区中的像素颜色进行绘制，这里涉及到双缓冲的问题
-    glfwSwapBuffers(_Graph.window);
+    glfwSwapBuffers(_g_Graph.window);
     //检查有没有触发什么事件（键盘输入、鼠标移动等)、窗口改变
     glfwPollEvents();
-    glfwSetKeyCallback(_Graph.window, processInput);
-    glfwSetCursorPosCallback(_Graph.window, mouse_callback);
+    // glfwSetKeyCallback(_Graph.window, processInput);
+    // glfwSetCursorPosCallback(_Graph.window, mouse_callback);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-void mouse_callback(GLFWwindow *window, double xpos, double ypos)
-{
-    //     float xoffset = (float)(xpos - lastX);
-    //     float yoffset = (float)(lastY - ypos);
-    //     lastX = (float)xpos;
-    //     lastY = (float)ypos;
-    //     xoffset *= sensitivity;
-    //     yoffset *= sensitivity;
-    //     MapDrawer::getInstance()->UpdateView(xoffset, yoffset);
-    // }
-}
-void processInput(GLFWwindow *window, int key, int scancode, int action, int mode)
-{
-    //     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    //         glfwSetWindowShouldClose(window, true);
-    //     if(glfwGetKey(window,GLFW_KEY_W)==GLFW_PRESS)
-    //         MapDrawer::getInstance()->Forward(deltatime*20.0f);
-    //     if(glfwGetKey(window,GLFW_KEY_A)==GLFW_PRESS)
-    //         MapDrawer::getInstance()->Leftward(deltatime*20.0f);
-    //     if(glfwGetKey(window,GLFW_KEY_S)==GLFW_PRESS)
-    //         MapDrawer::getInstance()->Backward(deltatime*20.0f);
-    //     if(glfwGetKey(window,GLFW_KEY_D)==GLFW_PRESS)
-    //         MapDrawer::getInstance()->Rightward(deltatime*20.0f);
-    // if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-    //     MapDrawer::getInstance()->UpdateView(0.01f, 0.01f);
-}
+// void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+// {
+//     //     float xoffset = (float)(xpos - lastX);
+//     //     float yoffset = (float)(lastY - ypos);
+//     //     lastX = (float)xpos;
+//     //     lastY = (float)ypos;
+//     //     xoffset *= sensitivity;
+//     //     yoffset *= sensitivity;
+//     //     MapDrawer::getInstance()->UpdateView(xoffset, yoffset);
+//     // }
+// }
+// void processInput(GLFWwindow *window, int key, int scancode, int action, int mode)
+// {
+//     //     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+//     //         glfwSetWindowShouldClose(window, true);
+//     //     if(glfwGetKey(window,GLFW_KEY_W)==GLFW_PRESS)
+//     //         MapDrawer::getInstance()->Forward(deltatime*20.0f);
+//     //     if(glfwGetKey(window,GLFW_KEY_A)==GLFW_PRESS)
+//     //         MapDrawer::getInstance()->Leftward(deltatime*20.0f);
+//     //     if(glfwGetKey(window,GLFW_KEY_S)==GLFW_PRESS)
+//     //         MapDrawer::getInstance()->Backward(deltatime*20.0f);
+//     //     if(glfwGetKey(window,GLFW_KEY_D)==GLFW_PRESS)
+//     //         MapDrawer::getInstance()->Rightward(deltatime*20.0f);
+//     // if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+//     //     MapDrawer::getInstance()->UpdateView(0.01f, 0.01f);
+// }

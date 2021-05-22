@@ -15,6 +15,6 @@ public:
     bool init();
 };
 
-extern Graph _Graph;
+extern Graph _g_Graph;
 
 #endif // __DRAWSYS_H__
