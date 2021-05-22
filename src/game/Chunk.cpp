@@ -1,7 +1,7 @@
 #include "Chunk.h"
 
 // chunk在map中的key //////////////////////////////////
-ChunkIDStruct::ChunkIDStruct(int x, int y, int z)
+ChunkKeyStruct::ChunkKeyStruct(int x, int y, int z)
 {
     this->x = x;
     this->y = y;

@@ -13,7 +13,7 @@ void Gui::init()
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 
-    ImGui_ImplGlfw_InitForOpenGL(_Graph.window, true);
+    ImGui_ImplGlfw_InitForOpenGL(_g_Graph.window, true);
     ImGui_ImplOpenGL3_Init();
 
     // Setup style
@@ -21,7 +21,7 @@ void Gui::init()
     //ImGui::StyleColorsClassic();
     ImGui::StyleColorsLight();
     ImGuiStyle &style = ImGui::GetStyle();
-    style.ScaleAllSizes(_Graph.highDPIscaleFactor);
+    style.ScaleAllSizes(_g_Graph.highDPIscaleFactor);
     // Load Fonts
     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
     // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
@@ -33,11 +33,11 @@ void Gui::init()
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
     ImFontConfig config;
-    config.SizePixels = 18.0f * wim.highDPIscaleFactor;
+    config.SizePixels = 18.0f * _g_Graph.highDPIscaleFactor;
     font_default = io.Fonts->AddFontDefault(&config);
-    font_cousine = io.Fonts->AddFontFromFileTTF("resource/font/Cousine-Regular.ttf", 15.0f * wim.highDPIscaleFactor);
-    font_karla = io.Fonts->AddFontFromFileTTF("resource/font/Karla-Regular.ttf", 18.0f * wim.highDPIscaleFactor);
-    font_latol = io.Fonts->AddFontFromFileTTF("resource/font/Lato-Regular.ttf", 18.0f * wim.highDPIscaleFactor);
+    font_cousine = io.Fonts->AddFontFromFileTTF("resource/font/Cousine-Regular.ttf", 15.0f * _g_Graph.highDPIscaleFactor);
+    font_karla = io.Fonts->AddFontFromFileTTF("resource/font/Karla-Regular.ttf", 18.0f * _g_Graph.highDPIscaleFactor);
+    font_latol = io.Fonts->AddFontFromFileTTF("resource/font/Lato-Regular.ttf", 18.0f * _g_Graph.highDPIscaleFactor);
 
     // io.Fonts->AddFontFromFileTTF("resource/font/DroidSans.ttf", 16.0f);
     // io.Fonts->AddFontFromFileTTF("resource/font/ProggyTiny.ttf", 10.0f);

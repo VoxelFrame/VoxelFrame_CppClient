@@ -9,7 +9,7 @@ using phmap::flat_hash_map;
 
 ChunkMap::ChunkMap()
 {
-    this->chunkPhMap[ChunkIDStruct(0, 0, 0)] = new Chunk(0, 0, 0);
+    this->chunkPhMap[ChunkKeyStruct(0, 0, 0)] = new Chunk(0, 0, 0);
 }
 
 ChunkMap::~ChunkMap()

@@ -1,4 +1,0 @@
-namespace NetSys
-{
-    void start();
-}
