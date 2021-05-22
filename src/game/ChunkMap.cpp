@@ -1,13 +1,15 @@
 #include "ChunkMap.h"
 //chunkmap下是一个chunk的键值对
 //用于存储chunks,并在操作时可以快速地获取
-#include "sparsepp/spp.h"
+// #include "sparsepp/spp.h"
+
 #include "Chunk.h"
 
-using spp::sparse_hash_map;
+using phmap::flat_hash_map;
 
 ChunkMap::ChunkMap()
 {
+    this->chunkPhMap[ChunkIDStruct(0, 0, 0)] = new Chunk(0, 0, 0);
 }
 
 ChunkMap::~ChunkMap()

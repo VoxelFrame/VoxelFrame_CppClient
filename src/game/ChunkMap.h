@@ -1,11 +1,11 @@
 #pragma once
-#include "sparsepp/spp.h"
+#include "parallel_hashmap/phmap.h"
 #include "Chunk.h"
 
 class ChunkMap
 {
 private:
-    spp::sparse_hash_map<ChunkIDStruct, Chunk> chunkSparseMap;
+    phmap::flat_hash_map<ChunkIDStruct, Chunk *> chunkPhMap;
     /* data */
 public:
     ChunkMap(/* args */);
