@@ -1,4 +1,16 @@
-design
+## design
+
+### 代码结构
+
+models
+
+只做数据的操作和存储
+
+sys 
+
+各方面的函数
+
+
 
 对于单个chunk来说
 

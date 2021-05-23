@@ -17,3 +17,6 @@
 [submodule "third/parallel-hashmap"]
 	path = third/parallel-hashmap
 	url = https://github.com/VoxelFrame/parallel-hashmap.git
+[submodule "third/paecs"]
+	path = third/paecs
+	url = https://github.com/ActivePeter/paecs.git
