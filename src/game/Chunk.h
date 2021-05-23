@@ -2,6 +2,7 @@
 
 #define ChunkSize 64
 #include "graph/Mesh.h"
+#include "graph/interface/MeshBuilder.h"
 
 struct ChunkKeyStruct
 {
@@ -13,7 +14,7 @@ struct ChunkKeyStruct
     ChunkKeyStruct(int x, int y, int z);
 };
 
-class Chunk
+class Chunk : MeshBuilder
 {
 private:
     int blockData[ChunkSize * ChunkSize * ChunkSize]; //protobuf需要直接解析到的目标位置
@@ -21,6 +22,7 @@ private:
     Mesh mesh;
     /* data */
 public:
+    void buildMesh();
     void fillTest();
     Chunk(int x, int y, int z);
     ~Chunk();

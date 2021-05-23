@@ -8,6 +8,24 @@ ChunkKeyStruct::ChunkKeyStruct(int x, int y, int z)
     this->z = z;
 }
 
+void Chunk::buildMesh()
+{
+    this->mesh.clearIndices()
+        //先遍历添加顶点
+        ;
+    this->mesh.clearVertices();
+    // this->mesh
+    for (int x = 0; x < ChunkSize + 1; x++)
+    {
+        for (int y = 0; y < ChunkSize + 1; y++)
+        {
+            for (int z = 0; z < ChunkSize + 1; z++)
+            {
+            }
+        }
+    }
+}
+
 // Chunk（区块） /////////////////////
 void Chunk::fillTest()
 {
