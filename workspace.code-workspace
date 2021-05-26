@@ -107,7 +107,13 @@
 			"compare": "cpp",
 			"forward_list": "cpp",
 			"stack": "cpp",
-			"*.rh": "cpp"
+			"*.rh": "cpp",
+			"scoped_allocator": "cpp",
+			"bit": "cpp",
+			"hash_map": "cpp",
+			"stop_token": "cpp",
+			"typeindex": "cpp",
+			"unordered_set": "cpp"
 		}
 	}
 }
