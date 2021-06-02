@@ -1,3 +1,5 @@
+// #include "glad/glad.h"
+
 #include "MapDrawer.h"
 #include "iostream"
 #include "glm/glm.hpp"

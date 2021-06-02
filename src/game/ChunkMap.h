@@ -5,7 +5,7 @@
 class ChunkMap
 {
 private:
-    phmap::flat_hash_map<ChunkKeyStruct, Chunk *> chunkPhMap;
+    // phmap::flat_hash_map<ChunkKeyStruct, Chunk *> chunkPhMap;
     /* data */
 public:
     ChunkMap(/* args */);

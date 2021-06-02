@@ -1,6 +1,8 @@
 // #include "DrawSys.h"
+// #include "glad/glad.h"
+
 #include "_Graph.h"
-#include "glad/glad.h"
+
 #include "GLFW/glfw3.h"
 #include <iostream>
 #include "io/Input.h"

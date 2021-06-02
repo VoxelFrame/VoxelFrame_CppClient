@@ -1,5 +1,5 @@
 #include "Input.h"
-#include "glad/glad.h"
+
 #include "GLFW/glfw3.h"
 #include "graph/_Graph.h"
 // #include "Models/WindowInfoModel.h"

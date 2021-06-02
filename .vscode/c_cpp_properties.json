@@ -13,6 +13,7 @@
                 "${workspaceFolder}/third/stb_image/include",
                 // "${workspaceFolder}/third/sparsepp",
                 "${workspaceFolder}/third/parallel-hashmap",
+                "${workspaceFolder}/third/paecs/src",
             ],
             "defines": [
                 "_DEBUG",

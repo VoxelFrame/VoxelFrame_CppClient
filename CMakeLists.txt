@@ -46,7 +46,7 @@ add_subdirectory(${BRYNET_DIR})
 include_directories (${BRYNET_DIR}/include)
 
 # parallel_hashmap
-set (parallel_hashmap_dir ${3RD_DIR})
+set (parallel_hashmap_dir ${3RD_DIR}/parallel-hashmap)
 include_directories (${parallel_hashmap_dir})
 # # sparsepp
 # set (sparsepp_dir ${3RD_DIR}/sparsepp)
@@ -57,6 +57,9 @@ set (PROTO_DIR ${3RD_DIR}/protobuff)
 # add_subdirectory(${PROTO_DIR}/cmake)
 include_directories (${PROTO_DIR}/src)
 
+set (PAECS_DIR ${3RD_DIR}/paecs)
+add_subdirectory(${PAECS_DIR}) 
+include_directories (${PAECS_DIR}/src)
 
 # file(GLOB protobuf_libs
 #         ${PROJECT_SOURCE_DIR}/build/third/protobuff/cmake/*.lib
@@ -123,7 +126,7 @@ if(MSVC)
         set (protolibs ${protolib_dir}Release/libprotobuf.lib ${protolib_dir}Release/libprotobuf-lite.lib ${protolib_dir}Release/libprotoc.lib)
     
     target_link_libraries (${PROJECT_NAME} 
-        general glfw glad imgui ws2_32 ${protolibs} 
+        general glfw glad imgui ws2_32 ${protolibs} paecs
         # debug ${protolibsd}
         # optimized ${protolibs}
     )

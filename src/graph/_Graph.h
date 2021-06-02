@@ -1,5 +1,6 @@
 #ifndef __DRAWSYS_H__
 #define __DRAWSYS_H__
+#include <glad/glad.h>
 #include "GLFW/glfw3.h"
 
 class Graph
