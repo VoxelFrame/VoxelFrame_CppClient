@@ -26,29 +26,36 @@ struct B
     char testChar;
 };
 
-void helloworld_sys(A &a)
+void helloworld_sys(B &a)
 {
+    std::cout << "helloworld" << std::endl;
 }
 int main()
 {
-    auto &scene = *paecs::createScene();
+
+    if (!_g_Graph.init())
+    {
+        return -1; //启动失败
+    }
+    auto scenePtr = paecs::createScene();
+    auto &scene = *scenePtr;
+
     scene.createEntity()
         .addEmptyComponent<A>()
         .addEmptyComponent<B>();
     scene.addSysByFunc(helloworld_sys);
-
-    while (1)
+    // _g_net.start();
+    // NetSys::start();
+    // WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
+    while (_g_Graph.running())
     {
+        // DrawSys::doDraw();
+        _g_Graph.doDraw();
+        // //清屏
+        // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        // glClear(GL_COLOR_BUFFER_BIT);
         scene.loop();
     }
-
-    // if (!_g_Graph.init())
-    // {
-    //     return -1; //启动失败
-    // }
-    // _g_net.start();
-    // // NetSys::start();
-    // // WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
 
     // //循环渲染，在退出前一直不断地绘制图像
     // while (!glfwWindowShouldClose(_g_Graph.window))
@@ -61,6 +68,6 @@ int main()
     // }
 
     // // 退出前清理
-    // glfwTerminate();
+    _g_Graph.end();
     return 0;
 }

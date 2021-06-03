@@ -21,6 +21,11 @@ void drawEnd();
 void processInput(GLFWwindow *window, int key, int scancode, int action, int mode);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
+//////////////////////////////////////
+//
+// 生命周期
+//
+//////////////////////////////////////
 bool Graph::init()
 {
     glfwInit(); //初始化GLFW
@@ -79,6 +84,8 @@ bool Graph::init()
     _Gui.init();
     return true;
 }
+
+///////////////////////////////////////////////////////////////////////
 
 // 绘制相关 /////////////////////////////////////////////////////////
 void Graph::doDraw()

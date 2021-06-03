@@ -8,12 +8,20 @@ class Graph
 private:
     /* data */
 public:
-    int windowH;
-    int windowW;
+    int windowH = 800;
+    int windowW = 1000;
     GLFWwindow *window;
     float highDPIscaleFactor = 1;
     void doDraw();
     bool init();
+    inline bool running()
+    {
+        return !glfwWindowShouldClose(window);
+    }
+    inline void end()
+    {
+        glfwTerminate();
+    }
 };
 
 extern Graph _g_Graph;
