@@ -8,6 +8,8 @@
 #include "graph/_Graph.h"
 #include "net/_net.h"
 
+class Game;
+////////////////////////////////////////
 struct A
 {
     int id;
@@ -18,14 +20,11 @@ struct B
     char testChar;
 };
 
-void helloworld_sys(B &a)
-{
-    std::cout << "helloworld" << std::endl;
-}
+void helloworld_sys(B &a);
 
 //the global one
 //全局唯一单例 存储，访问 所有动静态资源
-class app
+class App
 {
 private:
     /* data */
@@ -38,48 +37,8 @@ public:
     // {
 
     // }
-    void run()
-    {
-        ecsPtr = paecs::createScene();
-        gamePtr = std::make_shared<Game>();
-
-        if (!_g_Graph.init())
-        {
-            return; //启动失败
-        }
-
-        auto &ecs = *ecsPtr;
-        ecs.createEntity()
-            .addEmptyComponent<A>()
-            .addEmptyComponent<B>();
-        ecs.addSysByFunc(helloworld_sys);
-        // _g_net.start();
-        // NetSys::start();
-        // WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
-        gamePtr->start();
-        while (_g_Graph.running())
-        {
-            // DrawSys::doDraw();
-            _g_Graph.doDraw();
-            // //清屏
-            // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            // glClear(GL_COLOR_BUFFER_BIT);
-            ecs.loop();
-        }
-
-        // //循环渲染，在退出前一直不断地绘制图像
-        // while (!glfwWindowShouldClose(_g_Graph.window))
-        // {
-        //     // DrawSys::doDraw();
-        //     _g_Graph.doDraw();
-        //     // //清屏
-        //     // glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        //     // glClear(GL_COLOR_BUFFER_BIT);
-        // }
-
-        // // 退出前清理
-        _g_Graph.end();
-    }
+    void run();
+    static App &getInstance();
 };
 
-extern app _g_app;
+// extern app _g_app;
