@@ -3,6 +3,7 @@
 #include "graph/Mesh.h"
 #include "graph/_Graph.h"
 #include "game.h"
+#include "app.h"
 #define ChunkWidth 64
 #define ChunkSize (ChunkWidth * ChunkWidth * ChunkWidth)
 
@@ -41,10 +42,48 @@ private:
     {
         return x + y * (ChunkWidth + 1) + z * (ChunkWidth + 1) * (ChunkWidth + 1);
     }
+    //需要确保参数一一对应
+    //构建一个维度的面
+    void constructMeshInOneDim(
+        uint8_t &block,
+        uint8_t &block_p,
+        CommonBlockInfo &blockInfo,
+        CommonBlockInfo &blockInfo_p,
+        CommonBlockInfo::FaceDirection posDir,
+        CommonBlockInfo::FaceDirection negDir)
+    {
+        //+1为空 当前为实心
+        if (!block_p &&
+            block &&
+            blockInfo.hasFace(posDir))
+        {
+            uint8_t indicesOfIndices[6]; //qaq 取不来名字了
+            blockInfo.getFaceIndices(posDir, indicesOfIndices);
+            for (int i = 0; i < 6; i++)
+            {
+                indices.push_back(_8points[indicesOfIndices[i]]);
+            }
+            //逆时针面为正面
+        }
+        //x为空 x+1为实,添加朝x负向的面
+        else if (!x &&
+                 _x_p &&
+                 blockInfo_p.hasFace(negDir))
+        {
+            uint8_t indicesOfIndices[6]; //qaq 取不来名字了
+            blockInfo_p.getFaceIndices(negDir, indicesOfIndices);
+            for (int i = 0; i < 6; i++)
+            {
+                indices.push_back(_8points[indicesOfIndices[i]]);
+            }
+            //逆时针面为正面
+        }
+    }
 
 public:
     uint8_t data[ChunkSize];
     ChunkKey chunkKey;
+    Game &game;
 
     //首次加载、数据变更（修改地形，都要构造（前提是在视野内
     void constructMesh()
@@ -64,7 +103,7 @@ public:
                 }
             }
         }
-
+        auto blockManager = _g_app.gamePtr->blockManager;
         //遍历区块
         for (int x = 0; x < ChunkWidth; x++)
         {
@@ -72,47 +111,36 @@ public:
             {
                 for (int z = 0; z < ChunkWidth; z++)
                 {
+                    uint32_t _8points = {
+                        getIndexByPos(x + 0, y + 0, z + 0),
+                        getIndexByPos(x + 1, y + 0, z + 0),
+                        getIndexByPos(x + 0, y + 1, z + 0),
+                        getIndexByPos(x + 0, y + 0, z + 1),
+                        getIndexByPos(x + 1, y + 1, z + 0),
+                        getIndexByPos(x + 0, y + 1, z + 1),
+                        getIndexByPos(x + 1, y + 0, z + 1),
+                        getIndexByPos(x + 1, y + 1, z + 1),
+                    };
                     //             x y z
-                    uint32_t _0_0_0 = getIndexByPos(x + 0, y + 0, z + 0);
-                    uint32_t _1_0_0 = getIndexByPos(x + 1, y + 0, z + 0);
-                    uint32_t _0_1_0 = getIndexByPos(x + 0, y + 1, z + 0);
-                    uint32_t _0_0_1 = getIndexByPos(x + 0, y + 0, z + 1);
-                    uint32_t _1_1_0 = getIndexByPos(x + 1, y + 1, z + 0);
-                    uint32_t _0_1_1 = getIndexByPos(x + 0, y + 1, z + 1);
-                    uint32_t _1_0_1 = getIndexByPos(x + 1, y + 0, z + 1);
-                    uint32_t _1_1_1 = getIndexByPos(x + 1, y + 1, z + 1);
-                    //x+1为空 x为实,添加朝x正向的面
-                    if (!readData(x + 1, y, z) && readData(x, y, z))
-                    {
-                        // index_1_0_0
-                        // index_1_1_0
-                        // index_1_0_1
-                        // index_1_1_1
+                    //x+1 空 x 不空 x 的正向面存在
+                    auto _block = readData(x, y, z);
+                    auto &blockInfo = blockManager->getBlockInfo(_block);
 
-                        //逆时针面为正面
-                        indices.push_back(_1_0_0, _1_1_0, _1_0_1);
-                        indices.push_back(_1_0_1, _1_1_1, _1_1_0);
-                    }
-                    //x为空 x+1为实,添加朝x负向的面
-                    else if (readData(x + 1, y, z) && !readData(x, y, z))
-                    {
-                    }
-                    //y+1为空 y为实,添加朝y正向的面
-                    if (!readData(x, y + 1, z) && readData(x, y, z))
-                    {
-                    }
-                    //y为空 y+1为实,添加朝y负向的面
-                    else if (readData(x, y + 1, z) && !readData(x, y, z))
-                    {
-                    }
-                    //z+1为空 z为实,添加朝z正向的面
-                    if (!readData(x, y, z + 1) && readData(x, y, z))
-                    {
-                    }
-                    //z为空 z+1为实,添加朝z负向的面
-                    else if (readData(x, y, z + 1) && !readData(x, y, z))
-                    {
-                    }
+                    //构建一个维度的面
+                    auto _block_p = readData(x + 1, y, z);
+                    auto &blockInfo_p = blockManager->getBlockInfo(_block_p);
+                    constructMeshInOneDim(_block, _block_p, blockInfo, blockInfo_p,
+                                          CommonBlockInfo::FaceX_Positive, CommonBlockInfo::FaceX_Negative);
+
+                    _block_p = readData(x, y + 1, z);
+                    &blockInfo_p = blockManager->getBlockInfo(_block_p);
+                    constructMeshInOneDim(_block, _block_p, blockInfo, blockInfo_p,
+                                          CommonBlockInfo::FaceY_Positive, CommonBlockInfo::FaceY_Negative);
+
+                    _block_p = readData(x, y, z + 1);
+                    &blockInfo_p = blockManager->getBlockInfo(_block_p);
+                    constructMeshInOneDim(_block, _block_p, blockInfo, blockInfo_p,
+                                          CommonBlockInfo::FaceZ_Positive, CommonBlockInfo::FaceZ_Negative);
                 }
             }
         }
@@ -137,12 +165,12 @@ public:
 class ChunkManager
 {
 private:
-    Game &game;
+    // Game &game;
     /* data */
     phmap::flat_hash_map<ChunkKey, std::shared_ptr<Chunk>> chunkKey2chunkPtr;
 
 public:
-    ChunkManager(Game &game) : game(game)
+    ChunkManager()
     {
         addNewChunk(0, 0, 0);
     }

@@ -8,9 +8,9 @@
 // #pragma comment(lib, "libprotobuf.lib")
 // #pragma comment(lib,"lib文件名或路径")
 // #include "stb_image.h"
-
+app _g_app;
 int main()
 {
-    app().run();
+    _g_app.run();
     return 0;
 }

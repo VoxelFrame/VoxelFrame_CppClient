@@ -1,5 +1,6 @@
 #pragma once
 #include "base.h"
+#include "game.h"
 // class CommonBlockMeshModel
 // {
 // private:
@@ -80,16 +81,12 @@ public:
 class BlockManager
 {
 private:
-    /* data */
-
-    Game &game;
-
     //通过方块id查询方块面状态
     std::vector<CommonBlockInfo> commonBlockInfos;
 
 public:
     // CommonBlockFaceState commonBlockFaceState[];
-    BlockManager(Game &game) : game(game)
+    BlockManager()
     {
         commonBlockInfos.resize(255);
     }

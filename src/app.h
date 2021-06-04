@@ -34,13 +34,15 @@ public:
     std::shared_ptr<paecs::Scene> ecsPtr;
     std::shared_ptr<Game> gamePtr;
 
-    app()
+    // app()
+    // {
+
+    // }
+    void run()
     {
         ecsPtr = paecs::createScene();
         gamePtr = std::make_shared<Game>();
-    }
-    void run()
-    {
+
         if (!_g_Graph.init())
         {
             return; //启动失败
@@ -79,3 +81,5 @@ public:
         _g_Graph.end();
     }
 };
+
+extern app _g_app;
