@@ -54,6 +54,7 @@ public:
         // _g_net.start();
         // NetSys::start();
         // WindowInfoModel &windowInfoModel = WindowInfoModel::getInstance();
+        gamePtr->start();
         while (_g_Graph.running())
         {
             // DrawSys::doDraw();

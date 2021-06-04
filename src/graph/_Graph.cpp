@@ -16,7 +16,7 @@ float lastX = 400, lastY = 300;
 float sensitivity = 0.05f;
 
 void drawBegin();
-void drawMain();
+// void drawMain();
 void drawEnd();
 void processInput(GLFWwindow *window, int key, int scancode, int action, int mode);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
@@ -88,10 +88,28 @@ bool Graph::init()
 ///////////////////////////////////////////////////////////////////////
 
 // 绘制相关 /////////////////////////////////////////////////////////
+void Graph::drawMesh()
+{
+    //遍历需要绘制的区块网格
+    for (int i = 0; i < chunks2Draw.size(); i++)
+    {
+        chunks2Draw[i]->draw();
+    }
+}
+
+void Graph::addChunk2DrawList(std::shared_ptr<Chunk> chunkPtr)
+{
+
+    chunks2Draw.push_back(chunkPtr);
+    chunkPtr->constructMesh();
+}
 void Graph::doDraw()
 {
     drawBegin();
-    drawMain();
+    // drawMain();
+    drawMesh();
+    _Gui.renderGui();
+    _Gui.drawGui(); //绘制gui，最后一步做
     drawEnd();
 }
 inline void drawBegin()
@@ -107,16 +125,16 @@ inline void drawBegin()
     glCullFace(GL_FRONT);
 }
 
-inline void drawMain()
-{
-    // if (GuiSys::isRender)
-    // {
-    // MapDrawer::getInstance()->doDraw();
-    // }
+// inline void drawMain()
+// {
+//     // if (GuiSys::isRender)
+//     // {
+//     // MapDrawer::getInstance()->doDraw();
+//     // }
 
-    _Gui.renderGui();
-    _Gui.drawGui(); //绘制gui，最后一步做
-}
+//     //绘制chunk网格
+
+// }
 
 inline void drawEnd()
 {
